@@ -15,11 +15,11 @@ class BookController extends BaseController
 
   public function __construct(array $headers, array $body, array $queryParams)
   {
-      $bookRepository = new BookRepository();
-      $this->bookService = new BookService($bookRepository);
-      $this->bookQueyService = new BookQueyService($bookRepository);
+    $bookRepository = new BookRepository();
+    $this->bookService = new BookService($bookRepository);
+    $this->bookQueyService = new BookQueyService($bookRepository);
 
-      parent::__construct($headers, $body, $queryParams);
+    parent::__construct($headers, $body, $queryParams);
   }
 
   public function listOneBook(int $id)
