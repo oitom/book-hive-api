@@ -11,15 +11,13 @@ class BookService
 {
   private BookRepository $bookRepository;
 
-  public function __construct(BookRepository $bookRepository)
+  public function __construct()
   {
-    $this->bookRepository = $bookRepository;
+    $this->bookRepository = new BookRepository();
   }
 
   public function create(array $validatedData)
   {
-    // Cria a entidade Book com os dados validados
-
     $autores = array_map(function($autorData) {
       return new Autor($autorData['nome']);
     }, $validatedData['autor']);

@@ -3,16 +3,14 @@
 namespace App\Presentation\Controller;
 use App\Presentation\Validator\BookValidator;
 use App\Application\Service\BookService;
-use App\Infrastructure\Repository\BookRepository;
 
 class BookController extends BaseController
 {
   private BookService $bookService;
+  
   public function __construct(array $headers, array $body, array $queryParams)
   {
-    $bookRepository = new BookRepository();
-    $this->bookService = new BookService($bookRepository);
-
+    $this->bookService = new BookService();
     parent::__construct($headers, $body, $queryParams);
   }
   
