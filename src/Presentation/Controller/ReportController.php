@@ -44,7 +44,7 @@ class ReportController extends BaseController
     $pdf->AddPage();
     
     $pdf->SetFont('helvetica', 'B', 14);
-    $pdf->Cell(0, 5, 'Relatório de Livros', 0, 1, 'C');
+    $pdf->Cell(0, 15, 'Relatório de Livros', 0, 1, 'C');
     $pdf->SetFont('helvetica', '', 10);
     $pdf->SetFillColor(100, 100, 100);
     $pdf->SetTextColor(255, 255, 255);
@@ -52,10 +52,10 @@ class ReportController extends BaseController
     $pdf->Cell(40, 5, 'Título', 1, 0, 'C', 1);
     $pdf->Cell(30, 5, 'Editora', 1, 0, 'C', 1);
     $pdf->Cell(20, 5, 'Edição', 1, 0, 'C', 1);
-    $pdf->Cell(40, 5, 'Ano de Publicação', 1, 0, 'C', 1);
+    $pdf->Cell(20, 5, 'Ano Pub.', 1, 0, 'C', 1);
     $pdf->Cell(20, 5, 'Preço', 1, 0, 'C', 1);
     $pdf->Cell(60, 5, 'Autores', 1, 0, 'C', 1);
-    $pdf->Cell(70, 5, 'Assuntos', 1, 1, 'C', 1);
+    $pdf->Cell(80, 5, 'Assuntos', 1, 1, 'C', 1);
 
     $pdf->SetFillColor(224, 235, 255);
     $pdf->SetTextColor(0);
@@ -67,18 +67,18 @@ class ReportController extends BaseController
       $assuntos = implode(', ', $livro->assuntos);
 
       if (strlen($autores) > 40) {
-        $autores = substr($autores, 0, 37) . '...';
+        $autores = substr($autores, 0, 40) . '...';
       }
-      if (strlen($assuntos) > 40) {
-        $assuntos = substr($assuntos, 0, 37) . '...';
+      if (strlen($assuntos) > 45) {
+        $assuntos = substr($assuntos, 0, 45) . '...';
       }
       $pdf->Cell(40, 5, $livro->titulo, 1, 0, 'L', $fill);
-      $pdf->Cell(30, 5, $livro->editora, 1, 0, 'L', $fill);
-      $pdf->Cell(20, 5, $livro->edicao, 1, 0, 'L', $fill);
-      $pdf->Cell(40, 5, $livro->anoPublicacao, 1, 0, 'L', $fill);
-      $pdf->Cell(20, 5, $livro->preco, 1, 0, 'L', $fill);
+      $pdf->Cell(30, 5, $livro->editora, 1, 0, 'C', $fill);
+      $pdf->Cell(20, 5, $livro->edicao, 1, 0, 'C', $fill);
+      $pdf->Cell(20, 5, $livro->anoPublicacao, 1, 0, 'C', $fill);
+      $pdf->Cell(20, 5, $livro->preco, 1, 0, 'C', $fill);
       $pdf->Cell(60, 5, $autores, 1, 0, 'L', $fill);
-      $pdf->Cell(70, 5, $assuntos, 1, 1, 'L', $fill); 
+      $pdf->Cell(80, 5, $assuntos, 1, 1, 'L', $fill); 
     }
     
     $pdf->Output('relatorio_livros.pdf', 'I');
