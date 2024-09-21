@@ -1,16 +1,38 @@
 <?php
 
 namespace App\Presentation\Controller;
+use App\Presentation\Validator\BookValidator;
+use App\Application\Service\BookService;
+use App\Infrastructure\Repository\BookRepository;
 
-class BookController
+class BookController extends BaseController
 {
+  private BookService $bookService;
+  public function __construct(array $headers, array $body, array $queryParams)
+  {
+    $bookRepository = new BookRepository();
+    $this->bookService = new BookService($bookRepository);
+
+    parent::__construct($headers, $body, $queryParams);
+  }
+  
   public function listBooks()
   {
     return json_encode(['books' => ['Book 1', 'Book 2']]);
   }
 
   public function createBook()
-  {    
-    return json_encode(['message' => 'Book created successfully']);
+  {
+    $validator = new BookValidator();
+    $errors = $validator->validate($this->body);
+    
+    if (!empty($errors)) {
+      $this->sendErrorResponse($errors);
+    }
+
+    $validatedData = $this->body;
+    $book = $this->bookService->create($validatedData);
+
+    $this->sendSuccessResponse(['book' => $book], 'Book created successfully', 201);
   }
 }

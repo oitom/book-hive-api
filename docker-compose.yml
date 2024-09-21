@@ -12,6 +12,8 @@ services:
       - "8080:80"
     networks:
       - app-network
+    env_file:
+      .env
 
 
   mysql:
