@@ -109,6 +109,26 @@ class BookRepository implements BookRepositoryInterface
     }
   }
 
+  public function delete(int $id): bool
+  {
+    try {
+      $this->connection->beginTransaction();
+
+      $this->autorRepository->deleteAllByBookId($id);
+      $this->assuntoRepository->deleteAllByBookId($id);
+
+      $stmt = $this->connection->prepare('DELETE FROM livros WHERE id = :id');
+      $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+      $stmt->execute();
+
+      $this->connection->commit();
+      return true;
+    } catch (\Exception $e) {
+      $this->connection->rollBack();
+      throw new \RuntimeException('Error deleting book: ' . $e->getMessage());
+    }
+  }
+
   private function insertBook(Book $book): int
   {
     $stmt = $this->connection->prepare(
@@ -126,5 +146,5 @@ class BookRepository implements BookRepositoryInterface
     ]);
 
     return $this->connection->lastInsertId();
-  } 
+  }
 }

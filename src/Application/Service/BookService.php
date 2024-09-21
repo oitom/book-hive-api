@@ -49,6 +49,7 @@ class BookService
     if ($existingBook === null) {
       return null;
     }
+    
     $existingBook = BookMapper::toEntity($existingBook);
     $existingBook->setTitulo($bookUpdateCommand->titulo);
     $existingBook->setEditora($bookUpdateCommand->editora);
@@ -67,5 +68,15 @@ class BookService
     $existingBook->setAssuntos($assuntos);
 
     return $this->bookRepository->update($id, $existingBook);
+  }
+
+  public function delete(int $id): bool
+  {
+    $book = $this->bookRepository->findOne($id);
+    if ($book === null) {
+      return false;
+    }
+
+    return $this->bookRepository->delete($id);
   }
 }

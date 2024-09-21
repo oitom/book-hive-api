@@ -72,10 +72,22 @@ class BookController extends BaseController
     $updatedBook = $this->bookService->update($id, $updateCommand);
 
     if ($updatedBook === null) {
-      $this->sendErrorResponse(['message' => 'Failed to update book'], 500);
+      $this->sendErrorResponse(['message' => 'Failed to update book'], 400);
       return;
     }
 
     $this->sendSuccessResponse(['book' => $updatedBook], 'Book updated successfully');
+  }
+
+  public function deleteBook(int $id)
+  {
+    $deleted = $this->bookService->delete($id);
+
+    if (!$deleted) {
+      $this->sendErrorResponse(['message' => 'Failed to delete book'], 400);
+      return;
+    }
+
+    $this->sendSuccessResponse([], 'Book deleted successfully', 204);
   }
 }

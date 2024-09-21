@@ -11,4 +11,7 @@ return [
   'PUT' => [
     '/books/:id' => 'App\Presentation\Controller\BookController@updateBook',
   ],
+  'DELETE' => [
+    '/books/:id' => 'App\Presentation\Controller\BookController@deleteBook',
+  ],
 ];
