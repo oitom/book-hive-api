@@ -2,6 +2,8 @@
 
 namespace App\Domain\Entity;
 
+use DateTime;
+
 class Book
 {
   private string $titulo;
@@ -12,6 +14,11 @@ class Book
   private array $autor;   // Array de autores
   private array $assunto; // Array de assuntos
 
+  private int $ativo;
+  private DateTime $createdAt;
+  private ?DateTime $updatedAt;
+  private ?DateTime $deletedAt;
+
   public function __construct(
     string $titulo,
     string $editora,
@@ -19,7 +26,8 @@ class Book
     string $anoPublicacao,
     float $preco,
     array $autor,
-    array $assunto
+    array $assunto,
+    int $ativo = 1
   ) {
     $this->titulo = $titulo;
     $this->editora = $editora;
@@ -28,6 +36,11 @@ class Book
     $this->preco = $preco;
     $this->autor = $autor;
     $this->assunto = $assunto;
+
+    $this->ativo = $ativo;
+    $this->createdAt = new DateTime();
+    $this->updatedAt = null;
+    $this->deletedAt = null;
   }
 
   public function getTitulo(): string
@@ -98,5 +111,39 @@ class Book
   public function setAssunto(array $assunto): void
   {
     $this->assunto = $assunto;
+  }
+
+  public function setAtivo(int $ativo): void
+  {
+    $this->ativo = $ativo;
+  }
+  public function getAtivo(): int
+  {
+    return $this->ativo;
+  }
+
+  public function getCreatedAt(): string
+  {
+    return $this->createdAt->format('Y-m-d H:i:s');
+  }
+
+  public function getUpdatedAt(): ?string
+  {
+    return $this->updatedAt ? $this->updatedAt->format('Y-m-d H:i:s') : null;
+  }
+
+  public function setUpdatedAt(): void
+  {
+    $this->updatedAt = new DateTime();
+  }
+
+  public function getDeletedAt(): ?string
+  {
+    return $this->deletedAt ? $this->deletedAt->format('Y-m-d H:i:s') : null;
+  }
+
+  public function setDeletedAt(): void
+  {
+      $this->deletedAt = new DateTime();
   }
 }

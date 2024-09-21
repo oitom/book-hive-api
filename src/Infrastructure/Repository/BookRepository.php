@@ -23,15 +23,17 @@ class BookRepository
 
       // Inserir o livro na tabela 'books'
       $stmt = $this->connection->prepare(
-        'INSERT INTO books (titulo, editora, edicao, anoPublicacao, preco) 
-          VALUES (:titulo, :editora, :edicao, :anoPublicacao, :preco)'
+        'INSERT INTO books (titulo, editora, edicao, anoPublicacao, preco, ativo, createdAt) 
+          VALUES (:titulo, :editora, :edicao, :anoPublicacao, :preco, :ativo, :createdAt)'
       );
       $stmt->execute([
         ':titulo' => $book->getTitulo(),
         ':editora' => $book->getEditora(),
         ':edicao' => $book->getEdicao(),
         ':anoPublicacao' => $book->getAnoPublicacao(),
-        ':preco' => $book->getPreco()
+        ':preco' => $book->getPreco(),
+        ':ativo' => $book->getAtivo(),
+        ':createdAt' => $book->getcreatedAt(),
       ]);
 
       // Obter o ID do livro recém-criado
