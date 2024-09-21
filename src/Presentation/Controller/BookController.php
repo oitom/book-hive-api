@@ -35,9 +35,9 @@ class BookController extends BaseController
 
   public function listBooks()
   {
-    $search = $this->queryParams['search'] ?? null;
-    $page = $this->queryParams['page'] ?? 1;
-    $pageSize = $this->queryParams['pageSize'] ?? 10;
+    $search = $this->queryParams['search'] ?? '';
+    $page = (int) ($this->queryParams['page'] ?? 1);
+    $pageSize = (int) ($this->queryParams['pageSize'] ?? 10);
     $offset = ($page - 1) * $pageSize;
 
     $books = $this->bookQueyService->find($search, $pageSize, $offset);
