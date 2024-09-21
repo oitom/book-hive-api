@@ -56,14 +56,15 @@ class BookService
     $existingBook->setEdicao($bookUpdateCommand->edicao);
     $existingBook->setAnoPublicacao($bookUpdateCommand->anoPublicacao);
     $existingBook->setPreco($bookUpdateCommand->preco);
+    $existingBook->setUpdatedAt();
 
     $autores = array_map(function($autor) {
-        return new Author($autor['nome']);
+      return new Author($autor['nome']);
     }, $bookUpdateCommand->autores);
     $existingBook->setAutores($autores);
 
     $assuntos = array_map(function($assunto) {
-        return new Subject($assunto['descricao']);
+      return new Subject($assunto['descricao']);
     }, $bookUpdateCommand->assuntos);
     $existingBook->setAssuntos($assuntos);
 
@@ -73,10 +74,12 @@ class BookService
   public function delete(int $id): bool
   {
     $book = $this->bookRepository->findOne($id);
-    if ($book === null) {
+    $existingBook = BookMapper::mapOne($book);
+    if ($existingBook === null) {
       return false;
     }
-
-    return $this->bookRepository->delete($id);
+    $existingBook = BookMapper::toEntity($existingBook);
+    $existingBook->setDeletedAt();
+    return $this->bookRepository->delete($id, $existingBook);
   }
 }

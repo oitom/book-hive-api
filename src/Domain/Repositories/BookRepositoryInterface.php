@@ -10,5 +10,5 @@ interface BookRepositoryInterface
   public function findOne(int $id): array | null;
   public function find(): array | null;
   public function update(int $bookId, Book $book): bool;
-  public function delete(int $id): bool;
+  public function delete(int $id,  Book $book): bool;
 }

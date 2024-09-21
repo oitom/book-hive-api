@@ -13,8 +13,6 @@ class Book
   private float $preco;
   private array $autores;
   private array $assuntos;
-
-  private int $ativo;
   private DateTime $createdAt;
   private ?DateTime $updatedAt;
   private ?DateTime $deletedAt;
@@ -27,7 +25,6 @@ class Book
       float $preco,
       array $autores,
       array $assuntos,
-      int $ativo = 1
   ) {
       $this->titulo = $titulo;
       $this->editora = $editora;
@@ -37,7 +34,6 @@ class Book
       $this->autores = $autores;
       $this->assuntos = $assuntos;
 
-      $this->ativo = $ativo;
       $this->createdAt = new DateTime();
       $this->updatedAt = null;
       $this->deletedAt = null;
@@ -113,15 +109,6 @@ class Book
     $this->assuntos = $assuntos;
   }
 
-  public function setAtivo(int $ativo): void
-  {
-    $this->ativo = $ativo;
-  }
-  public function getAtivo(): int
-  {
-    return $this->ativo;
-  }
-
   public function getCreatedAt(): string
   {
     return $this->createdAt->format('Y-m-d H:i:s');
@@ -144,6 +131,6 @@ class Book
 
   public function setDeletedAt(): void
   {
-      $this->deletedAt = new DateTime();
+    $this->deletedAt = new DateTime();
   }
 }

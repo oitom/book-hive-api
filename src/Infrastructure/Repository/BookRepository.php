@@ -46,7 +46,7 @@ class BookRepository implements BookRepositoryInterface
       FROM livros b
       LEFT JOIN autores a ON a.livro_id = b.id
       LEFT JOIN assuntos s ON s.livro_id = b.id
-      WHERE b.id = :id
+      WHERE b.id = :id AND b.deletedAt IS NULL
       GROUP BY b.id');
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
@@ -63,6 +63,7 @@ class BookRepository implements BookRepositoryInterface
         FROM livros b
         LEFT JOIN autores a ON a.livro_id = b.id
         LEFT JOIN assuntos s ON s.livro_id = b.id
+        WHERE b.deletedAt IS NULL
         GROUP BY b.id
     ');
     $stmt->execute();
@@ -79,7 +80,7 @@ class BookRepository implements BookRepositoryInterface
       $stmt = $this->connection->prepare(
           'UPDATE livros 
           SET titulo = :titulo, editora = :editora, edicao = :edicao, 
-              anoPublicacao = :anoPublicacao, preco = :preco, ativo = :ativo, updatedAt = :updatedAt 
+              anoPublicacao = :anoPublicacao, preco = :preco, updatedAt = :updatedAt 
           WHERE id = :id'
       );
 
@@ -89,8 +90,7 @@ class BookRepository implements BookRepositoryInterface
           ':edicao' => $book->getEdicao(),
           ':anoPublicacao' => $book->getAnoPublicacao(),
           ':preco' => $book->getPreco(),
-          ':ativo' => $book->getAtivo(),
-          ':updatedAt' => date('Y-m-d H:i:s'),  // Atualiza a data de modificação
+          ':updatedAt' => $book->getUpdatedAt(),
           ':id' => $bookId
       ]);
 
@@ -109,17 +109,16 @@ class BookRepository implements BookRepositoryInterface
     }
   }
 
-  public function delete(int $id): bool
+  public function delete(int $id, Book $book): bool
   {
     try {
       $this->connection->beginTransaction();
 
-      $this->autorRepository->deleteAllByBookId($id);
-      $this->assuntoRepository->deleteAllByBookId($id);
-
-      $stmt = $this->connection->prepare('DELETE FROM livros WHERE id = :id');
-      $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-      $stmt->execute();
+      $stmt = $this->connection->prepare('UPDATE livros SET deletedAt = :deletedAt WHERE id = :id');
+      $stmt->execute([
+        ':deletedAt' => $book->getDeletedAt(),
+        ':id' => $id
+      ]);
 
       $this->connection->commit();
       return true;
@@ -132,8 +131,8 @@ class BookRepository implements BookRepositoryInterface
   private function insertBook(Book $book): int
   {
     $stmt = $this->connection->prepare(
-        'INSERT INTO livros (titulo, editora, edicao, anoPublicacao, preco, ativo, createdAt) 
-          VALUES (:titulo, :editora, :edicao, :anoPublicacao, :preco, :ativo, :createdAt)'
+        'INSERT INTO livros (titulo, editora, edicao, anoPublicacao, preco, createdAt) 
+          VALUES (:titulo, :editora, :edicao, :anoPublicacao, :preco, :createdAt)'
     );
     $stmt->execute([
       ':titulo' => $book->getTitulo(),
@@ -141,7 +140,6 @@ class BookRepository implements BookRepositoryInterface
       ':edicao' => $book->getEdicao(),
       ':anoPublicacao' => $book->getAnoPublicacao(),
       ':preco' => $book->getPreco(),
-      ':ativo' => $book->getAtivo(),
       ':createdAt' => $book->getCreatedAt(),
     ]);
 
