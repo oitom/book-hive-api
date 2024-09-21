@@ -2,7 +2,6 @@
 
 namespace App\Infrastructure\Database;
 
-
 use PDO;
 use PDOException;
 

@@ -1,11 +1,12 @@
 <?php
 namespace App\Infrastructure\Repository;
 
+use App\Domain\Repositories\BookRepositoryInterface;
 use App\Domain\Entity\Book;
 use App\Infrastructure\Database\PDOConnection;
 use PDO;
 
-class BookRepository
+class BookRepository implements BookRepositoryInterface
 {
   private PDO $connection;
   private AutorRepository $autorRepository;
@@ -32,16 +33,47 @@ class BookRepository
       $this->connection->commit();
       return true;
     } catch (\Exception $e) {
-      // Reverter transação em caso de erro
       $this->connection->rollBack();
       throw new \RuntimeException('Error saving book: ' . $e->getMessage());
     }
   }
 
+  public function findOne(int $id): array | null
+  {
+    $stmt = $this->connection->prepare( 'SELECT b.*, 
+          GROUP_CONCAT(DISTINCT a.nome) AS autores, 
+          GROUP_CONCAT(DISTINCT s.descricao) AS assuntos
+      FROM livros b
+      LEFT JOIN autores a ON a.livro_id = b.id
+      LEFT JOIN assuntos s ON s.livro_id = b.id
+      WHERE b.id = :id
+      GROUP BY b.id');
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+  }
+
+  public function find(): array
+  {
+    $stmt = $this->connection->prepare('
+        SELECT b.*, 
+              GROUP_CONCAT(DISTINCT a.nome) AS autores, 
+              GROUP_CONCAT(DISTINCT s.descricao) AS assuntos
+        FROM livros b
+        LEFT JOIN autores a ON a.livro_id = b.id
+        LEFT JOIN assuntos s ON s.livro_id = b.id
+        GROUP BY b.id
+    ');
+    $stmt->execute();
+    
+    return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+  }
+
   private function insertBook(Book $book): int
   {
     $stmt = $this->connection->prepare(
-        'INSERT INTO books (titulo, editora, edicao, anoPublicacao, preco, ativo, createdAt) 
+        'INSERT INTO livros (titulo, editora, edicao, anoPublicacao, preco, ativo, createdAt) 
           VALUES (:titulo, :editora, :edicao, :anoPublicacao, :preco, :ativo, :createdAt)'
     );
     $stmt->execute([

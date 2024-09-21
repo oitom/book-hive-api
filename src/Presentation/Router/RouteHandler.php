@@ -8,21 +8,30 @@ class RouteHandler
   private array $headers;
   private array $body;
   private array $queryParams;
+
   public function __construct()
   {
     $this->routes = require __DIR__ . '/routes.php';
     $this->headers = getallheaders();
-    $this->body = json_decode(file_get_contents('php://input'), true);
+    $this->body = json_decode(file_get_contents('php://input'), true) ?? [];
     $this->queryParams = $_GET;
   }
 
   public function handle(string $uri, string $method)
   {
-    if (isset($this->routes[$method][$uri])) {
-      [$controllerClass, $action] = explode('@', $this->routes[$method][$uri]);
+    foreach ($this->routes[$method] as $route => $action) {
+      // Cria uma expressão regular para capturar parâmetros
+      $routePattern = preg_replace('/:\w+/', '(\d+)', $route); 
+      if (preg_match("#^$routePattern$#", $uri, $matches)) {
+        [$controllerClass, $actionMethod] = explode('@', $action);
+        $controller = new $controllerClass($this->headers, $this->body, $this->queryParams);
 
-      $controller = new $controllerClass($this->headers, $this->body, $this->queryParams);
-      return $controller->$action();
+        // Remove o índice 0, que contém a string completa
+        array_shift($matches);
+        
+        // enviar o paramentro (:id) para a action da controller
+        return $controller->$actionMethod(...$matches);
+      }
     }
 
     return $this->notFoundResponse();

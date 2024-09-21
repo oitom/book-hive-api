@@ -16,12 +16,12 @@ class AutorRepository
   public function saveAll(array $autores, int $bookId): void
   {
     $stmt = $this->connection->prepare(
-      'INSERT INTO autores (book_id, nome) VALUES (:book_id, :nome)'
+      'INSERT INTO autores (livro_id, nome) VALUES (:livro_id, :nome)'
     );
 
     foreach ($autores as $autor) {
       $stmt->execute([
-        ':book_id' => $bookId,
+        ':livro_id' => $bookId,
         ':nome' => $autor->getNome()
       ]);
     }

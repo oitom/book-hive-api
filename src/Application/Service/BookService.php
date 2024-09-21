@@ -2,41 +2,40 @@
 
 namespace App\Application\Service;
 
-use App\Infrastructure\Repository\BookRepository;
+use App\Domain\Repositories\BookRepositoryInterface;
 use App\Domain\Entity\Book;
 use App\Domain\Entity\Autor;
 use App\Domain\Entity\Assunto;
-
+use App\Domain\Commands\BookCreateCommand;
 class BookService
 {
-  private BookRepository $bookRepository;
+  private BookRepositoryInterface $bookRepository;
 
-  public function __construct()
+  public function __construct(BookRepositoryInterface $bookRepository)
   {
-    $this->bookRepository = new BookRepository();
+    $this->bookRepository = $bookRepository;
   }
 
-  public function create(array $validatedData)
+  public function create(BookCreateCommand $bookCreateCommand)
   {
-    $autores = array_map(function($autorData) {
-      return new Autor($autorData['nome']);
-    }, $validatedData['autor']);
+    $autores = array_map(function($autor) {
+      return new Autor($autor['nome']);
+    }, $bookCreateCommand->autores);
 
-    $assuntos = array_map(function($assuntoData) {
-      return new Assunto($assuntoData['descricao']);
-    }, $validatedData['assunto']);
+    $assuntos = array_map(function($assunto) {
+      return new Assunto($assunto['descricao']);
+    }, $bookCreateCommand->assuntos);
 
     $book = new Book(
-      $validatedData['titulo'],
-      $validatedData['editora'],
-      $validatedData['edicao'],
-      $validatedData['anoPublicacao'],
-      $validatedData['preco'],
+      $bookCreateCommand->titulo,
+      $bookCreateCommand->editora,
+      $bookCreateCommand->edicao,
+      $bookCreateCommand->anoPublicacao,
+      $bookCreateCommand->preco,
       $autores,
       $assuntos
     );
 
-    // Salva no repositório
     return $this->bookRepository->save($book);
   }
 }

@@ -17,12 +17,12 @@ class AssuntoRepository
   public function saveAll(array $assuntos, int $bookId): void
   {
     $stmt = $this->connection->prepare(
-      'INSERT INTO assuntos (book_id, descricao) VALUES (:book_id, :descricao)'
+      'INSERT INTO assuntos (livro_id, descricao) VALUES (:livro_id, :descricao)'
     );
 
     foreach ($assuntos as $assunto) {
       $stmt->execute([
-        ':book_id' => $bookId,
+        ':livro_id' => $bookId,
         ':descricao' => $assunto->getDescricao()
       ]);
     }

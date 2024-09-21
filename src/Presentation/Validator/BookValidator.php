@@ -12,8 +12,8 @@ class BookValidator extends BaseValidator
       'edicao' => ['required', 11, 'integer'],
       'anoPublicacao' => ['required', 4, 'string'],
       'preco' => ['required', 11, 'decimal'],
-      'autor' => ['required', 1, 'array'],
-      'assunto' => ['required', 1, 'array'],
+      'autores' => ['required', 1, 'array'],
+      'assuntos' => ['required', 1, 'array'],
     ];
 
     parent::__construct($rules);
