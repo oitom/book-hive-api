@@ -4,6 +4,7 @@ namespace App\Application\Dtos;
 
 class BookDto
 {
+  public string $id;
   public string $titulo;
   public string $editora;
   public string $edicao;
@@ -13,6 +14,7 @@ class BookDto
   public array $assuntos;
 
   public function __construct(
+    string $id,
     string $titulo,
     string $editora,
     string $edicao,
@@ -21,6 +23,7 @@ class BookDto
     array $autores,
     array $assuntos
   ) {
+    $this->id = $id;
     $this->titulo = $titulo;
     $this->editora = $editora;
     $this->edicao = $edicao;

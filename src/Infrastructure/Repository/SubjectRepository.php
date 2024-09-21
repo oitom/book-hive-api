@@ -26,4 +26,11 @@ class SubjectRepository
       ]);
     }
   }
+
+  public function deleteAllByBookId(int $bookId): void
+  {
+    $stmt = $this->connection->prepare('DELETE FROM assuntos WHERE livro_id = :bookId');
+    $stmt->bindParam(':bookId', $bookId, PDO::PARAM_INT);
+    $stmt->execute();
+  }
 }

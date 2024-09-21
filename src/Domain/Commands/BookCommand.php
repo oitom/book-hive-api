@@ -2,7 +2,7 @@
 
 namespace App\Domain\Commands;
 
-class BookCreateCommand
+class BookCommand
 {
   public string $titulo;
   public string $editora;
@@ -12,8 +12,7 @@ class BookCreateCommand
   public array $autores;
   public array $assuntos;
 
-  public function __construct(array $book
-  ) {
+  public function __construct(array $book) {
     $this->titulo = $book['titulo'];
     $this->editora = $book['editora'];
     $this->edicao = $book['edicao'];

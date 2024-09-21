@@ -9,4 +9,5 @@ interface BookRepositoryInterface
   public function save(Book $book): bool;
   public function findOne(int $id): array | null;
   public function find(): array | null;
+  public function update(int $bookId, Book $book): bool;
 }

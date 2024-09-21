@@ -70,6 +70,45 @@ class BookRepository implements BookRepositoryInterface
     return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
   }
 
+  public function update(int $bookId, Book $book): bool
+  {
+    try {
+      $this->connection->beginTransaction();
+
+      // Atualizar os dados do livro na tabela livros
+      $stmt = $this->connection->prepare(
+          'UPDATE livros 
+          SET titulo = :titulo, editora = :editora, edicao = :edicao, 
+              anoPublicacao = :anoPublicacao, preco = :preco, ativo = :ativo, updatedAt = :updatedAt 
+          WHERE id = :id'
+      );
+
+      $stmt->execute([
+          ':titulo' => $book->getTitulo(),
+          ':editora' => $book->getEditora(),
+          ':edicao' => $book->getEdicao(),
+          ':anoPublicacao' => $book->getAnoPublicacao(),
+          ':preco' => $book->getPreco(),
+          ':ativo' => $book->getAtivo(),
+          ':updatedAt' => date('Y-m-d H:i:s'),  // Atualiza a data de modificação
+          ':id' => $bookId
+      ]);
+
+      // Atualizar autores e assuntos
+      $this->autorRepository->deleteAllByBookId($bookId);
+      $this->autorRepository->saveAll($book->getAutores(), $bookId);
+
+      $this->assuntoRepository->deleteAllByBookId($bookId);
+      $this->assuntoRepository->saveAll($book->getAssuntos(), $bookId);
+
+      $this->connection->commit();
+      return true;
+    } catch (\Exception $e) {
+      $this->connection->rollBack();
+      throw new \RuntimeException('Error updating book: ' . $e->getMessage());
+    }
+  }
+
   private function insertBook(Book $book): int
   {
     $stmt = $this->connection->prepare(
@@ -87,5 +126,5 @@ class BookRepository implements BookRepositoryInterface
     ]);
 
     return $this->connection->lastInsertId();
-  }
+  } 
 }

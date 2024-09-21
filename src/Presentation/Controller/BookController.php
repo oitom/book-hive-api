@@ -6,7 +6,7 @@ use App\Presentation\Validator\BookValidator;
 use App\Infrastructure\Repository\BookRepository;
 use App\Application\Service\BookService;
 use App\Application\Service\BookQueyService;
-use App\Domain\Commands\BookCreateCommand;
+use App\Domain\Commands\BookCommand;
 
 class BookController extends BaseController
 {
@@ -53,9 +53,29 @@ class BookController extends BaseController
       $this->sendErrorResponse($errors);
     }
 
-    $command = new BookCreateCommand($this->body);
+    $command = new BookCommand($this->body);
     $book = $this->bookService->create($command);
 
     $this->sendSuccessResponse(['book' => $book], 'Book created successfully', 201);
+  }
+
+  public function updateBook(int $id)
+  {
+    $validator = new BookValidator();
+    $errors = $validator->validate($this->body);
+    if (!empty($errors)) {
+      $this->sendErrorResponse($errors);
+      return;
+    }
+
+    $updateCommand = new BookCommand($this->body);
+    $updatedBook = $this->bookService->update($id, $updateCommand);
+
+    if ($updatedBook === null) {
+      $this->sendErrorResponse(['message' => 'Failed to update book'], 500);
+      return;
+    }
+
+    $this->sendSuccessResponse(['book' => $updatedBook], 'Book updated successfully');
   }
 }
