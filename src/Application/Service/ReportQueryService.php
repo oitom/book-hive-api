@@ -8,16 +8,17 @@ use TCPDF;
 
 class ReportQueryService
 {
-  private ReportRepositoryInterface $reportBookRespository;
+  private ReportRepositoryInterface $reportRepository;
 
-  public function __construct(ReportRepositoryInterface $reportBookRespository)
+  public function __construct(ReportRepositoryInterface $reportRepositoryInterface)
   {
-    $this->reportBookRespository = $reportBookRespository;
+    $this->reportRepository = $reportRepositoryInterface;
   }
 
   public function find(string $search, int $pageSize, int $offset): array|null
   {
-    $books = $this->reportBookRespository->find($search, $pageSize, $offset);
+    $books = $this->reportRepository->find($search, $pageSize, $offset);
+
     return BookMapper::mapList($books);
   }
 
@@ -65,7 +66,8 @@ class ReportQueryService
       
       $pdf->Cell(60, 5, $autores, 1, 0, 'L', $fill);
       $pdf->Cell(80, 5, $assuntos, 1, 1, 'L', $fill);
-    }    
-    $pdf->Output('relatorio_livros.pdf', 'I');
+    }
+    
+    $pdf->Output('relatorio_livros.pdf', 'D');
   }
 }

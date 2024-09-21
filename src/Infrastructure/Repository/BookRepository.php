@@ -119,26 +119,24 @@ class BookRepository implements BookRepositoryInterface
     try {
       $this->connection->beginTransaction();
 
-      // Atualizar os dados do livro na tabela livros
       $stmt = $this->connection->prepare(
-          'UPDATE livros 
+        'UPDATE livros 
           SET titulo = :titulo, editora = :editora, edicao = :edicao, 
-              anoPublicacao = :anoPublicacao, preco = :preco, updatedAt = :updatedAt 
+            anoPublicacao = :anoPublicacao, preco = :preco, updatedAt = :updatedAt 
           WHERE id = :id'
       );
 
       $stmt->execute([
-          ':titulo' => $book->getTitulo(),
-          ':editora' => $book->getEditora(),
-          ':edicao' => $book->getEdicao(),
-          ':anoPublicacao' => $book->getAnoPublicacao(),
-          ':preco' => $book->getPreco(),
-          ':updatedAt' => $book->getUpdatedAt(),
-          ':id' => $bookId
+        ':titulo' => $book->getTitulo(),
+        ':editora' => $book->getEditora(),
+        ':edicao' => $book->getEdicao(),
+        ':anoPublicacao' => $book->getAnoPublicacao(),
+        ':preco' => $book->getPreco(),
+        ':updatedAt' => $book->getUpdatedAt(),
+        ':id' => $bookId
       ]);
 
-      // Atualizar autores e assuntos
-      $this->autorRepository->deleteAllByBookId($bookId);
+    $this->autorRepository->deleteAllByBookId($bookId);
       $this->autorRepository->saveAll($book->getAutores(), $bookId);
 
       $this->assuntoRepository->deleteAllByBookId($bookId);
@@ -174,8 +172,8 @@ class BookRepository implements BookRepositoryInterface
   private function insertBook(Book $book): int
   {
     $stmt = $this->connection->prepare(
-        'INSERT INTO livros (titulo, editora, edicao, anoPublicacao, preco, createdAt) 
-          VALUES (:titulo, :editora, :edicao, :anoPublicacao, :preco, :createdAt)'
+      'INSERT INTO livros (titulo, editora, edicao, anoPublicacao, preco, createdAt) 
+        VALUES (:titulo, :editora, :edicao, :anoPublicacao, :preco, :createdAt)'
     );
     $stmt->execute([
       ':titulo' => $book->getTitulo(),

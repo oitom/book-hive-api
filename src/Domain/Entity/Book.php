@@ -18,25 +18,25 @@ class Book
   private ?DateTime $deletedAt;
 
   public function __construct(
-      string $titulo,
-      string $editora,
-      int $edicao,
-      string $anoPublicacao,
-      float $preco,
-      array $autores,
-      array $assuntos,
+    string $titulo,
+    string $editora,
+    int $edicao,
+    string $anoPublicacao,
+    float $preco,
+    array $autores,
+    array $assuntos,
   ) {
-      $this->titulo = $titulo;
-      $this->editora = $editora;
-      $this->edicao = $edicao;
-      $this->anoPublicacao = $anoPublicacao;
-      $this->preco = $preco;
-      $this->autores = $autores;
-      $this->assuntos = $assuntos;
+    $this->titulo = $titulo;
+    $this->editora = $editora;
+    $this->edicao = $edicao;
+    $this->anoPublicacao = $anoPublicacao;
+    $this->preco = $preco;
+    $this->autores = $autores;
+    $this->assuntos = $assuntos;
 
-      $this->createdAt = new DateTime();
-      $this->updatedAt = null;
-      $this->deletedAt = null;
+    $this->createdAt = new DateTime();
+    $this->updatedAt = null;
+    $this->deletedAt = null;
   }
 
   public function getTitulo(): string

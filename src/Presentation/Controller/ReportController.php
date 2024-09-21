@@ -4,7 +4,7 @@ namespace App\Presentation\Controller;
 
 use App\Application\Service\ReportQueryService;
 use App\Infrastructure\Repository\ReportRepository;
-
+use App\Presentation\Enum\HttpCodesEnum;
 
 class ReportController extends BaseController
 {
@@ -28,7 +28,10 @@ class ReportController extends BaseController
     $data = $this->reportQueryService->find($search, $pageSize, $offset);
 
     if (count($data['books']) == 0) {
-      $this->sendErrorResponse(['message' => 'Books not found'], 404);
+      $this->sendErrorResponse(
+        ['message' => 'Books not found'], 
+        HttpCodesEnum::HTTP_NOT_FOUND
+      );
     }
     
     return $this->reportQueryService->generateBookReport($data['books']);

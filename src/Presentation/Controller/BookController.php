@@ -7,6 +7,7 @@ use App\Infrastructure\Repository\BookRepository;
 use App\Application\Service\BookService;
 use App\Application\Service\BookQueyService;
 use App\Domain\Commands\BookCommand;
+use App\Presentation\Enum\HttpCodesEnum;
 
 class BookController extends BaseController
 {
@@ -27,13 +28,17 @@ class BookController extends BaseController
     $book = $this->bookQueyService->findOne($id);
 
     if ($book === null) {
-      $this->sendErrorResponse(['message' => 'Book not found'], 404);
+      $this->sendErrorResponse(
+        ['message' => 'Book not found'], 
+        HttpCodesEnum::HTTP_NOT_FOUND
+      );
+      return;
     }
 
-    return json_encode(['book' => $book]);
+    $this->sendSuccessResponse(['book' => $book]);
   }
 
-  public function listBooks()
+  public function listBooks(): void
   {
     $search = $this->queryParams['search'] ?? '';
     $page = (int) ($this->queryParams['page'] ?? 1);
@@ -43,28 +48,37 @@ class BookController extends BaseController
     $books = $this->bookQueyService->find($search, $pageSize, $offset);
 
     if (count($books['books']) == 0) {
-      $this->sendErrorResponse(['message' => 'Books not found'], 404);
+      $this->sendErrorResponse(
+        ['message' => 'Books not found'], 
+        HttpCodesEnum::HTTP_NOT_FOUND
+      );
+      return;
     }
 
-    return json_encode($books);
+    $this->sendSuccessResponse($books);
   }
 
-  public function createBook()
+  public function createBook(): void
   {
     $validator = new BookValidator();
     $errors = $validator->validate($this->body);
     
     if (!empty($errors)) {
       $this->sendErrorResponse($errors);
+      return;
     }
 
     $command = new BookCommand($this->body);
     $book = $this->bookService->create($command);
 
-    $this->sendSuccessResponse(['book' => $book], 'Book created successfully', 201);
+    $this->sendSuccessResponse(
+      ['book' => $book], 
+      'Book created successfully', 
+      HttpCodesEnum::HTTP_CREATED
+    );
   }
 
-  public function updateBook(int $id)
+  public function updateBook(int $id): void
   {
     $validator = new BookValidator();
     $errors = $validator->validate($this->body);
@@ -77,22 +91,34 @@ class BookController extends BaseController
     $updatedBook = $this->bookService->update($id, $updateCommand);
 
     if ($updatedBook === null) {
-      $this->sendErrorResponse(['message' => 'Failed to update book'], 400);
+      $this->sendErrorResponse(
+        ['message' => 'Book not found or failed to updated'], 
+        HttpCodesEnum::HTTP_NOT_FOUND
+      );
       return;
     }
 
-    $this->sendSuccessResponse(['book' => $updatedBook], 'Book updated successfully');
+    $this->sendSuccessResponse(
+      ['book' => $updatedBook], 
+      'Book updated successfully'
+    );
   }
 
-  public function deleteBook(int $id)
+  public function deleteBook(int $id): void 
   {
     $deleted = $this->bookService->delete($id);
 
     if (!$deleted) {
-      $this->sendErrorResponse(['message' => 'Failed to delete book'], 400);
+      $this->sendErrorResponse(
+        ['message' => 'Book not found or failed to deleted'],
+        HttpCodesEnum::HTTP_NOT_FOUND
+      );
       return;
     }
 
-    $this->sendSuccessResponse([], 'Book deleted successfully', 204);
+    $this->sendSuccessResponse(
+      [], 
+      'Book deleted successfully'
+    );
   }
 }

@@ -43,11 +43,13 @@ class ReportRepository implements ReportRepositoryInterface
     if ($search) {
       $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
     }
+
     $stmt->bindValue(':limit', $pageSize, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
     
     $books =  $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    
     return ['books' => $books];
   }
 }

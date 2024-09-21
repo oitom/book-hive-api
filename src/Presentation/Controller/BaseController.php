@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Presentation\Controller;
+use App\Presentation\Enum\HttpCodesEnum;
 
 class BaseController
 {
@@ -30,7 +31,7 @@ class BaseController
     return $this->queryParams[$name] ?? null;
   }
 
-  protected function sendErrorResponse(array $errors, int $statusCode = 400)
+  protected function sendErrorResponse(array $errors, int $statusCode = HttpCodesEnum::HTTP_BAD_REQUEST)
   {
     http_response_code($statusCode);
     header('Content-Type: application/json');
@@ -38,14 +39,14 @@ class BaseController
     exit;
   }
 
-  protected function sendSuccessResponse(array $data = [], string $message = '', int $statusCode = 200)
+  protected function sendSuccessResponse(array $data = [], string $message = 'success', int $statusCode = HttpCodesEnum::HTTP_OK)
   {
     http_response_code($statusCode);
     header('Content-Type: application/json');
 
     $response = ['message' => $message];
     if (!empty($data)) {
-        $response['data'] = $data;
+      $response['data'] = $data;
     }
 
     echo json_encode($response);

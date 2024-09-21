@@ -31,6 +31,7 @@ class SubjectRepository
   {
     $stmt = $this->connection->prepare('DELETE FROM assuntos WHERE livro_id = :bookId');
     $stmt->bindParam(':bookId', $bookId, PDO::PARAM_INT);
+    
     $stmt->execute();
   }
 }

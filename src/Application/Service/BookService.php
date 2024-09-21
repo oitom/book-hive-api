@@ -80,6 +80,7 @@ class BookService
     }
     $existingBook = BookMapper::toEntity($existingBook);
     $existingBook->setDeletedAt();
+    
     return $this->bookRepository->delete($id, $existingBook);
   }
 }
