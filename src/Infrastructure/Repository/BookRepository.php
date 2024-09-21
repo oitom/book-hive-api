@@ -54,23 +54,66 @@ class BookRepository implements BookRepositoryInterface
     return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
   }
 
-  public function find(): array
+  public function find(string $search, int $pageSize, int $offset): array
   {
+    $searchQuery = '';
+    if ($search) {
+      $searchQuery = 'AND (b.titulo LIKE :search OR a.nome LIKE :search OR s.descricao LIKE :search)';
+    }
+
+    $countStmt = $this->connection->prepare('
+      SELECT COUNT(*) as total
+      FROM (
+          SELECT b.id
+          FROM livros b
+          LEFT JOIN autores a ON a.livro_id = b.id
+          LEFT JOIN assuntos s ON s.livro_id = b.id
+          WHERE b.deletedAt IS NULL ' . $searchQuery . '
+          GROUP BY b.id
+      ) as subquery'
+    );
+
+    if ($search) {
+      $countStmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+    }
+
+    $countStmt->execute();
+    $totalRecords = $countStmt->fetchColumn();
+
+    $totalPages = ceil($totalRecords / $pageSize);
+
     $stmt = $this->connection->prepare('
-        SELECT b.*, 
-              GROUP_CONCAT(DISTINCT a.nome) AS autores, 
-              GROUP_CONCAT(DISTINCT s.descricao) AS assuntos
-        FROM livros b
-        LEFT JOIN autores a ON a.livro_id = b.id
-        LEFT JOIN assuntos s ON s.livro_id = b.id
-        WHERE b.deletedAt IS NULL
-        GROUP BY b.id
+      SELECT b.*, 
+            GROUP_CONCAT(DISTINCT a.nome) AS autores, 
+            GROUP_CONCAT(DISTINCT s.descricao) AS assuntos
+      FROM livros b
+      LEFT JOIN autores a ON a.livro_id = b.id
+      LEFT JOIN assuntos s ON s.livro_id = b.id
+      WHERE b.deletedAt IS NULL ' . $searchQuery . '
+      GROUP BY b.id
+      LIMIT :limit OFFSET :offset
     ');
+
+    if ($search) {
+      $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+    }
+    $stmt->bindValue(':limit', $pageSize, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
     $stmt->execute();
     
-    return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-  }
+    $books = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
+    return [
+      'books' => $books,
+      'pagination' => [
+        'count' => $totalRecords,
+        'countPages' => $totalPages,
+        'currentPage' => ($offset / $pageSize) + 1
+      ]
+    ];
+  }
+  
   public function update(int $bookId, Book $book): bool
   {
     try {

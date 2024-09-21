@@ -30,9 +30,15 @@ class BookMapper
 
   public static function mapList(array|null $dataList): array|null
   {
-    return array_map(function ($data): BookDto|null {
+    // Mapeando apenas os dados dos livros
+    $books = array_map(function ($data): BookDto|null {
       return self::mapOne($data);
-    }, $dataList);
+    }, $dataList['books'] ?? []);
+
+    return [
+      'books' => $books,
+      'pagination' => $dataList['pagination'] ?? null
+    ];
   }
 
   public static function toEntity(BookDto $bookDto): Book

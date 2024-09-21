@@ -20,9 +20,9 @@ class BookQueyService
     $book = $this->bookRepository->findOne($id);
     return BookMapper::mapOne($book);
   }
-  public function find(): array|null
+  public function find($search, $pageSize, $offset): array|null
   {
-    $books = $this->bookRepository->find();
+    $books = $this->bookRepository->find($search, $pageSize, $offset);
     return BookMapper::mapList($books);
   }
 }

@@ -35,13 +35,18 @@ class BookController extends BaseController
 
   public function listBooks()
   {
-    $books = $this->bookQueyService->find();
+    $search = $this->queryParams['search'] ?? null;
+    $page = $this->queryParams['page'] ?? 1;
+    $pageSize = $this->queryParams['pageSize'] ?? 10;
+    $offset = ($page - 1) * $pageSize;
 
-    if ($books === null) {
+    $books = $this->bookQueyService->find($search, $pageSize, $offset);
+
+    if (count($books['books']) == 0) {
       $this->sendErrorResponse(['message' => 'Books not found'], 404);
     }
 
-    return json_encode(['books' => $books]);
+    return json_encode($books);
   }
 
   public function createBook()

@@ -19,17 +19,21 @@ class RouteHandler
 
   public function handle(string $uri, string $method)
   {
+    // Remove a query string (tudo após o "?") da URI para a comparação
+    $uri = parse_url($uri, PHP_URL_PATH);
+
     foreach ($this->routes[$method] as $route => $action) {
-      // Cria uma expressão regular para capturar parâmetros
-      $routePattern = preg_replace('/:\w+/', '(\d+)', $route); 
+      $routePattern = preg_replace('/:\w+/', '(\d+)', $route);
+      $routePattern = str_replace('/', '\/', $routePattern);
+
+      // Match para rotas exatas
       if (preg_match("#^$routePattern$#", $uri, $matches)) {
         [$controllerClass, $actionMethod] = explode('@', $action);
         $controller = new $controllerClass($this->headers, $this->body, $this->queryParams);
 
-        // Remove o índice 0, que contém a string completa
-        array_shift($matches);
-        
-        // enviar o paramentro (:id) para a action da controller
+        array_shift($matches); // Remove o índice 0, com a string completa
+
+        // Executa a action do controller
         return $controller->$actionMethod(...$matches);
       }
     }
