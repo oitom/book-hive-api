@@ -9,16 +9,16 @@ use PDO;
 class BookRepository implements BookRepositoryInterface
 {
   private PDO $connection;
-  private AutorRepository $autorRepository;
-  private AssuntoRepository $assuntoRepository;
+  private AuthorRepository $autorRepository;
+  private SubjectRepository $assuntoRepository;
 
   public function __construct()
   {
     $pdoConnection = new PDOConnection();
     $this->connection = $pdoConnection->getConnection();
     
-    $this->autorRepository = new AutorRepository($this->connection);
-    $this->assuntoRepository = new AssuntoRepository($this->connection);
+    $this->autorRepository = new AuthorRepository($this->connection);
+    $this->assuntoRepository = new SubjectRepository($this->connection);
   }
 
   public function save(Book $book): bool

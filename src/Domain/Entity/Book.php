@@ -11,8 +11,8 @@ class Book
   private int $edicao;
   private string $anoPublicacao;
   private float $preco;
-  private array $autores;   // Array de entidades Autor
-  private array $assuntos; // Array de entidades Assunto
+  private array $autores;
+  private array $assuntos;
 
   private int $ativo;
   private DateTime $createdAt;

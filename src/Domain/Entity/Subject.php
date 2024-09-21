@@ -2,7 +2,7 @@
 
 namespace App\Domain\Entity;
 
-class Assunto
+class Subject
 {
   private string $descricao;
 

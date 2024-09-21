@@ -2,7 +2,7 @@
 
 namespace App\Domain\Entity;
 
-class Autor
+class Author
 {
   private string $nome;
 

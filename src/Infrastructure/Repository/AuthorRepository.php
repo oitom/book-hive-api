@@ -1,11 +1,9 @@
 <?php
-
 namespace App\Infrastructure\Repository;
 
-use App\Domain\Entity\Assunto;
 use PDO;
 
-class AssuntoRepository
+class AuthorRepository
 {
   private PDO $connection;
 
@@ -14,16 +12,16 @@ class AssuntoRepository
     $this->connection = $connection;
   }
 
-  public function saveAll(array $assuntos, int $bookId): void
+  public function saveAll(array $autores, int $bookId): void
   {
     $stmt = $this->connection->prepare(
-      'INSERT INTO assuntos (livro_id, descricao) VALUES (:livro_id, :descricao)'
+      'INSERT INTO autores (livro_id, nome) VALUES (:livro_id, :nome)'
     );
 
-    foreach ($assuntos as $assunto) {
+    foreach ($autores as $autor) {
       $stmt->execute([
         ':livro_id' => $bookId,
-        ':descricao' => $assunto->getDescricao()
+        ':nome' => $autor->getNome()
       ]);
     }
   }
