@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Presentation\Enum;
+namespace App\Presentation\Enums;
 
 class HttpCodesEnum
 {

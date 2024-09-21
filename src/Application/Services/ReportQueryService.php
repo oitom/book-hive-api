@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Service;
+namespace App\Application\Services;
 
 use App\Domain\Repositories\ReportRepositoryInterface;
 use App\Application\Mappers\BookMapper;

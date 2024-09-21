@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Presentation\Controller;
-use App\Presentation\Enum\HttpCodesEnum;
+namespace App\Presentation\Controllers;
+use App\Presentation\Enums\HttpCodesEnum;
 
 class BaseController
 {

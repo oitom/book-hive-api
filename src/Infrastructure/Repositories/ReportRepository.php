@@ -1,5 +1,5 @@
 <?php
-namespace App\Infrastructure\Repository;
+namespace App\Infrastructure\Repositories;
 
 use App\Domain\Repositories\ReportRepositoryInterface;
 use App\Infrastructure\Database\PDOConnection;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Presentation\Validator;
+namespace App\Presentation\Validators;
 
 class BookValidator extends BaseValidator
 {

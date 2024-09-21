@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Service;
+namespace App\Application\Services;
 
 use App\Application\Dtos\BookDto;
 use App\Domain\Repositories\BookRepositoryInterface;

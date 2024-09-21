@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Entity;
+namespace App\Domain\Entities;
 
-class Subject
+class SubjectEntity
 {
   private string $descricao;
 

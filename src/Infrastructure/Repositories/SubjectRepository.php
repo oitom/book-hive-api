@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Infrastructure\Repository;
+namespace App\Infrastructure\Repositories;
 
 use PDO;
 
-class AuthorRepository
+class SubjectRepository
 {
   private PDO $connection;
 
@@ -13,24 +13,25 @@ class AuthorRepository
     $this->connection = $connection;
   }
 
-  public function saveAll(array $autores, int $bookId): void
+  public function saveAll(array $assuntos, int $bookId): void
   {
     $stmt = $this->connection->prepare(
-      'INSERT INTO autores (livro_id, nome) VALUES (:livro_id, :nome)'
+      'INSERT INTO assuntos (livro_id, descricao) VALUES (:livro_id, :descricao)'
     );
 
-    foreach ($autores as $autor) {
+    foreach ($assuntos as $assunto) {
       $stmt->execute([
         ':livro_id' => $bookId,
-        ':nome' => $autor->getNome()
+        ':descricao' => $assunto->getDescricao()
       ]);
     }
   }
 
   public function deleteAllByBookId(int $bookId): void
   {
-    $stmt = $this->connection->prepare('DELETE FROM autores WHERE livro_id = :bookId');
+    $stmt = $this->connection->prepare('DELETE FROM assuntos WHERE livro_id = :bookId');
     $stmt->bindParam(':bookId', $bookId, PDO::PARAM_INT);
+    
     $stmt->execute();
   }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Presentation\Controller;
+namespace App\Presentation\Controllers;
 
-use App\Presentation\Validator\BookValidator;
-use App\Infrastructure\Repository\BookRepository;
-use App\Application\Service\BookService;
-use App\Application\Service\BookQueyService;
+use App\Presentation\Validators\BookValidator;
+use App\Infrastructure\Repositories\BookRepository;
+use App\Application\Services\BookService;
+use App\Application\Services\BookQueyService;
 use App\Domain\Commands\BookCommand;
-use App\Presentation\Enum\HttpCodesEnum;
+use App\Presentation\Enums\HttpCodesEnum;
 
 class BookController extends BaseController
 {

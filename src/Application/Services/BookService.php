@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Application\Service;
+namespace App\Application\Services;
 
+use App\Domain\Entities\AuthorEntity;
+use App\Domain\Entities\BookEntity;
+use App\Domain\Entities\SubjectEntity;
 use App\Domain\Repositories\BookRepositoryInterface;
-use App\Domain\Entity\Book;
-use App\Domain\Entity\Author;
-use App\Domain\Entity\Subject;
 use App\Domain\Commands\BookCommand;
 use App\Application\Mappers\BookMapper;
 
@@ -21,14 +21,14 @@ class BookService
   public function create(BookCommand $bookCreateCommand): bool
   {
     $autores = array_map(function($autor) {
-      return new Author($autor['nome']);
+      return new AuthorEntity($autor['nome']);
     }, $bookCreateCommand->autores);
 
     $assuntos = array_map(function($assunto) {
-      return new Subject($assunto['descricao']);
+      return new SubjectEntity($assunto['descricao']);
     }, $bookCreateCommand->assuntos);
 
-    $book = new Book(
+    $book = new BookEntity(
       $bookCreateCommand->titulo,
       $bookCreateCommand->editora,
       $bookCreateCommand->edicao,
@@ -59,12 +59,12 @@ class BookService
     $existingBook->setUpdatedAt();
 
     $autores = array_map(function($autor) {
-      return new Author($autor['nome']);
+      return new AuthorEntity($autor['nome']);
     }, $bookUpdateCommand->autores);
     $existingBook->setAutores($autores);
 
     $assuntos = array_map(function($assunto) {
-      return new Subject($assunto['descricao']);
+      return new SubjectEntity($assunto['descricao']);
     }, $bookUpdateCommand->assuntos);
     $existingBook->setAssuntos($assuntos);
 

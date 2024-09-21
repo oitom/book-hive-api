@@ -3,9 +3,9 @@
 namespace App\Application\Mappers;
 
 use App\Application\Dtos\BookDto;
-use App\Domain\Entity\Book;
-use App\Domain\Entity\Author;
-use App\Domain\Entity\Subject;
+use App\Domain\Entities\BookEntity;
+use App\Domain\Entities\AuthorEntity;
+use App\Domain\Entities\SubjectEntity;
 
 class BookMapper
 {
@@ -40,17 +40,17 @@ class BookMapper
     ];
   }
 
-  public static function toEntity(BookDto $bookDto): Book
+  public static function toEntity(BookDto $bookDto): BookEntity
   {
     $autores = array_map(function ($nome) {
-      return new Author($nome);
+      return new AuthorEntity($nome);
     }, $bookDto->autores);
 
     $assuntos = array_map(function ($descricao) {
-      return new Subject($descricao);
+      return new SubjectEntity($descricao);
     }, $bookDto->assuntos);
 
-    return new Book(
+    return new BookEntity(
         $bookDto->titulo,
         $bookDto->editora,
         $bookDto->edicao,

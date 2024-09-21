@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Presentation\Controller;
+namespace App\Presentation\Controllers;
 
-use App\Application\Service\ReportQueryService;
-use App\Infrastructure\Repository\ReportRepository;
-use App\Presentation\Enum\HttpCodesEnum;
+use App\Application\Services\ReportQueryService;
+use App\Infrastructure\Repositories\ReportRepository;
+use App\Presentation\Enums\HttpCodesEnum;
 
 class ReportController extends BaseController
 {

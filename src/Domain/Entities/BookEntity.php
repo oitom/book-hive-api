@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Domain\Entity;
+namespace App\Domain\Entities;
 
 use DateTime;
 
-class Book
+class BookEntity
 {
   private string $titulo;
   private string $editora;

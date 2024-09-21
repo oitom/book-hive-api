@@ -1,8 +1,8 @@
 <?php
-namespace App\Infrastructure\Repository;
+namespace App\Infrastructure\Repositories;
 
 use App\Domain\Repositories\BookRepositoryInterface;
-use App\Domain\Entity\Book;
+use App\Domain\Entities\BookEntity;
 use App\Infrastructure\Database\PDOConnection;
 use PDO;
 
@@ -21,7 +21,7 @@ class BookRepository implements BookRepositoryInterface
     $this->assuntoRepository = new SubjectRepository($this->connection);
   }
 
-  public function save(Book $book): bool
+  public function save(BookEntity $book): bool
   {
     try {
       $this->connection->beginTransaction();
@@ -114,7 +114,7 @@ class BookRepository implements BookRepositoryInterface
     ];
   }
   
-  public function update(int $bookId, Book $book): bool
+  public function update(int $bookId, BookEntity $book): bool
   {
     try {
       $this->connection->beginTransaction();
@@ -150,7 +150,7 @@ class BookRepository implements BookRepositoryInterface
     }
   }
 
-  public function delete(int $id, Book $book): bool
+  public function delete(int $id, BookEntity $book): bool
   {
     try {
       $this->connection->beginTransaction();
@@ -169,7 +169,7 @@ class BookRepository implements BookRepositoryInterface
     }
   }
 
-  private function insertBook(Book $book): int
+  private function insertBook(BookEntity $book): int
   {
     $stmt = $this->connection->prepare(
       'INSERT INTO livros (titulo, editora, edicao, anoPublicacao, preco, createdAt) 
