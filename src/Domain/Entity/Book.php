@@ -11,8 +11,8 @@ class Book
   private int $edicao;
   private string $anoPublicacao;
   private float $preco;
-  private array $autor;   // Array de autores
-  private array $assunto; // Array de assuntos
+  private array $autores;   // Array de entidades Autor
+  private array $assuntos; // Array de entidades Assunto
 
   private int $ativo;
   private DateTime $createdAt;
@@ -20,27 +20,27 @@ class Book
   private ?DateTime $deletedAt;
 
   public function __construct(
-    string $titulo,
-    string $editora,
-    int $edicao,
-    string $anoPublicacao,
-    float $preco,
-    array $autor,
-    array $assunto,
-    int $ativo = 1
+      string $titulo,
+      string $editora,
+      int $edicao,
+      string $anoPublicacao,
+      float $preco,
+      array $autores,
+      array $assuntos,
+      int $ativo = 1
   ) {
-    $this->titulo = $titulo;
-    $this->editora = $editora;
-    $this->edicao = $edicao;
-    $this->anoPublicacao = $anoPublicacao;
-    $this->preco = $preco;
-    $this->autor = $autor;
-    $this->assunto = $assunto;
+      $this->titulo = $titulo;
+      $this->editora = $editora;
+      $this->edicao = $edicao;
+      $this->anoPublicacao = $anoPublicacao;
+      $this->preco = $preco;
+      $this->autores = $autores;
+      $this->assuntos = $assuntos;
 
-    $this->ativo = $ativo;
-    $this->createdAt = new DateTime();
-    $this->updatedAt = null;
-    $this->deletedAt = null;
+      $this->ativo = $ativo;
+      $this->createdAt = new DateTime();
+      $this->updatedAt = null;
+      $this->deletedAt = null;
   }
 
   public function getTitulo(): string
@@ -93,24 +93,24 @@ class Book
     $this->preco = $preco;
   }
 
-  public function getAutor(): array
+  public function getAutores(): array
   {
-    return $this->autor;
+    return $this->autores;
   }
 
-  public function setAutor(array $autor): void
+  public function setAutores(array $autores): void
   {
-    $this->autor = $autor;
+    $this->autores = $autores;
   }
 
-  public function getAssunto(): array
+  public function getAssuntos(): array
   {
-    return $this->assunto;
+    return $this->assuntos;
   }
 
-  public function setAssunto(array $assunto): void
+  public function setAssuntos(array $assuntos): void
   {
-    $this->assunto = $assunto;
+    $this->assuntos = $assuntos;
   }
 
   public function setAtivo(int $ativo): void

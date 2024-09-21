@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Book;
@@ -9,11 +8,16 @@ use PDO;
 class BookRepository
 {
   private PDO $connection;
+  private AutorRepository $autorRepository;
+  private AssuntoRepository $assuntoRepository;
 
   public function __construct()
   {
     $pdoConnection = new PDOConnection();
     $this->connection = $pdoConnection->getConnection();
+    
+    $this->autorRepository = new AutorRepository($this->connection);
+    $this->assuntoRepository = new AssuntoRepository($this->connection);
   }
 
   public function save(Book $book): bool
@@ -21,55 +25,35 @@ class BookRepository
     try {
       $this->connection->beginTransaction();
 
-      // Inserir o livro na tabela 'books'
-      $stmt = $this->connection->prepare(
-        'INSERT INTO books (titulo, editora, edicao, anoPublicacao, preco, ativo, createdAt) 
-          VALUES (:titulo, :editora, :edicao, :anoPublicacao, :preco, :ativo, :createdAt)'
-      );
-      $stmt->execute([
-        ':titulo' => $book->getTitulo(),
-        ':editora' => $book->getEditora(),
-        ':edicao' => $book->getEdicao(),
-        ':anoPublicacao' => $book->getAnoPublicacao(),
-        ':preco' => $book->getPreco(),
-        ':ativo' => $book->getAtivo(),
-        ':createdAt' => $book->getcreatedAt(),
-      ]);
+      $bookId = $this->insertBook($book);
+      $this->autorRepository->saveAll($book->getAutores(), $bookId);
+      $this->assuntoRepository->saveAll($book->getAssuntos(), $bookId);
 
-      // Obter o ID do livro recém-criado
-      $bookId = $this->connection->lastInsertId();
-
-      // Inserir os autores na tabela 'autores'
-      foreach ($book->getAutor() as $autor) {
-        $stmtAutor = $this->connection->prepare(
-          'INSERT INTO autores (book_id, nome) 
-            VALUES (:book_id, :nome)'
-        );
-        $stmtAutor->execute([
-          ':book_id' => $bookId,
-          ':nome' => $autor['nome']
-        ]);
-      }
-
-      // Inserir os assuntos na tabela 'assuntos'
-      foreach ($book->getAssunto() as $assunto) {
-        $stmtAssunto = $this->connection->prepare(
-          'INSERT INTO assuntos (book_id, descricao) 
-            VALUES (:book_id, :descricao)'
-        );
-        $stmtAssunto->execute([
-          ':book_id' => $bookId,
-          ':descricao' => $assunto['descricao']
-        ]);
-      }
-
-      // Confirmar transação
       $this->connection->commit();
       return true;
     } catch (\Exception $e) {
-      // Em caso de erro, reverter a transação
+      // Reverter transação em caso de erro
       $this->connection->rollBack();
       throw new \RuntimeException('Error saving book: ' . $e->getMessage());
     }
+  }
+
+  private function insertBook(Book $book): int
+  {
+    $stmt = $this->connection->prepare(
+        'INSERT INTO books (titulo, editora, edicao, anoPublicacao, preco, ativo, createdAt) 
+          VALUES (:titulo, :editora, :edicao, :anoPublicacao, :preco, :ativo, :createdAt)'
+    );
+    $stmt->execute([
+      ':titulo' => $book->getTitulo(),
+      ':editora' => $book->getEditora(),
+      ':edicao' => $book->getEdicao(),
+      ':anoPublicacao' => $book->getAnoPublicacao(),
+      ':preco' => $book->getPreco(),
+      ':ativo' => $book->getAtivo(),
+      ':createdAt' => $book->getCreatedAt(),
+    ]);
+
+    return $this->connection->lastInsertId();
   }
 }
