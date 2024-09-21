@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Presentation;
+namespace App\Presentation\Router;
 
 class RouteHandler
 {
