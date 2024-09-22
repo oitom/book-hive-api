@@ -2,20 +2,23 @@
 
 namespace App\Application\Services;
 
+use App\Application\Mappers\BookMapper;
 use App\Domain\Entities\AuthorEntity;
 use App\Domain\Entities\BookEntity;
 use App\Domain\Entities\SubjectEntity;
-use App\Domain\Repositories\BookRepositoryInterface;
 use App\Domain\Commands\BookCommand;
-use App\Application\Mappers\BookMapper;
+use App\Domain\Repositories\CacheInterface;
+use App\Domain\Repositories\BookRepositoryInterface;
 
 class BookService
 {
   private BookRepositoryInterface $bookRepository;
+  private CacheInterface $cache;
 
-  public function __construct(BookRepositoryInterface $bookRepository)
+  public function __construct(BookRepositoryInterface $bookRepository, CacheInterface $cache)
   {
     $this->bookRepository = $bookRepository;
+    $this->cache = $cache;
   }
 
   public function create(BookCommand $bookCreateCommand): bool
@@ -37,8 +40,13 @@ class BookService
       $autores,
       $assuntos
     );
+    $result = $this->bookRepository->save($book);
+    
+    if ($result) {
+      $this->cache->clear('books_search_*');
+    }
 
-    return $this->bookRepository->save($book);
+    return $result;
   }
 
   public function update(int $id, BookCommand $bookUpdateCommand): bool | null
@@ -68,7 +76,14 @@ class BookService
     }, $bookUpdateCommand->assuntos);
     $existingBook->setAssuntos($assuntos);
 
-    return $this->bookRepository->update($id, $existingBook);
+    $result = $this->bookRepository->update($id, $existingBook);
+
+    if ($result) {
+      $this->cache->delete("book_{$id}");
+      $this->cache->clear('books_search_*');
+    }
+
+    return $result;
   }
 
   public function delete(int $id): bool
@@ -81,6 +96,13 @@ class BookService
     $existingBook = BookMapper::toEntity($existingBook);
     $existingBook->setDeletedAt();
     
-    return $this->bookRepository->delete($id, $existingBook);
+    $result = $this->bookRepository->delete($id, $existingBook);
+
+    if ($result) {
+      $this->cache->delete("book_{$id}");
+      $this->cache->clear('books_search_*');
+    }
+
+    return $result;
   }
 }

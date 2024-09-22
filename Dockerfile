@@ -6,7 +6,10 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     git \
-    && docker-php-ext-install pdo_mysql mbstring
+    && docker-php-ext-install pdo_mysql mbstring \
+    # Instala a extensão do Redis
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
 # Habilitar o mod_rewrite do Apache
 RUN a2enmod rewrite
@@ -24,9 +27,6 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Copia o restante do código da aplicação
 COPY . .
-
-
-RUN a2enmod rewrite
 
 # Configurar o Apache para permitir .htaccess
 COPY ./apache-config.conf /etc/apache2/sites-available/000-default.conf

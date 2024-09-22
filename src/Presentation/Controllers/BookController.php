@@ -2,12 +2,13 @@
 
 namespace App\Presentation\Controllers;
 
+use App\Presentation\Enums\HttpCodesEnum;
 use App\Presentation\Validators\BookValidator;
-use App\Infrastructure\Repositories\BookRepository;
 use App\Application\Services\BookService;
 use App\Application\Services\BookQueyService;
 use App\Domain\Commands\BookCommand;
-use App\Presentation\Enums\HttpCodesEnum;
+use App\Infrastructure\Repositories\RedisCache;
+use App\Infrastructure\Repositories\BookRepository;
 
 class BookController extends BaseController
 {
@@ -16,9 +17,10 @@ class BookController extends BaseController
 
   public function __construct(array $headers, array $body, array $queryParams)
   {
+    $cache = new RedisCache();
     $bookRepository = new BookRepository();
-    $this->bookService = new BookService($bookRepository);
-    $this->bookQueyService = new BookQueyService($bookRepository);
+    $this->bookService = new BookService($bookRepository, $cache);
+    $this->bookQueyService = new BookQueyService($bookRepository, $cache);
 
     parent::__construct($headers, $body, $queryParams);
   }
