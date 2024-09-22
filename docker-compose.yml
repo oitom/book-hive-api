@@ -10,6 +10,7 @@ services:
       - .:/var/www/html
     ports:
       - "8080:80"
+    command: bash -c "composer install && apache2-foreground"
     networks:
       - app-network
     env_file:
