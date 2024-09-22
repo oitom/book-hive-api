@@ -166,4 +166,57 @@ class BookRepositoryTest extends TestCase
         $result = $this->bookRepository->delete($id, $book);
         $this->assertTrue($result);
     }
+
+    public function testFindWithSearch(): void
+    {
+        $search = 'Test';
+        $pageSize = 10;
+        $offset = 0;
+
+        // Configurar o comportamento do stmtMock para o método COUNT
+        $this->stmtMock->method('fetchColumn')->willReturn(1); // Simula que existe 1 livro
+
+        // Configurar o comportamento do stmtMock para o método fetchAll
+        $this->stmtMock->method('fetchAll')->willReturn([[ 
+            'id' => 1,
+            'titulo' => 'Test Book',
+            'editora' => 'Test Publisher',
+            'edicao' => 1,
+            'anoPublicacao' => 2023,
+            'preco' => 29.99,
+        ]]);
+
+        // Executar o método find com o parâmetro de busca
+        $result = $this->bookRepository->find($search, $pageSize, $offset);
+
+        // Verificar se o resultado contém os livros esperados
+        $this->assertArrayHasKey('books', $result);
+        $this->assertNotEmpty($result['books']);
+        $this->assertEquals(1, $result['pagination']['count']); // Verifica que o total é 1
+        $this->assertEquals(1, $result['pagination']['countPages']); // Verifica que o total de páginas é 1
+        $this->assertEquals(1, $result['pagination']['currentPage']); // Verifica que a página atual é 1
+    }
+
+    public function testFindWithoutSearch(): void
+    {
+        $search = '';
+        $pageSize = 10;
+        $offset = 0;
+
+        // Configurar o comportamento do stmtMock para o método COUNT
+        $this->stmtMock->method('fetchColumn')->willReturn(0); // Simula que não existe livro
+
+        // Configurar o comportamento do stmtMock para o método fetchAll
+        $this->stmtMock->method('fetchAll')->willReturn([]);
+
+        // Executar o método find sem parâmetro de busca
+        $result = $this->bookRepository->find($search, $pageSize, $offset);
+
+        // Verificar se o resultado contém os livros esperados
+        $this->assertArrayHasKey('books', $result);
+        $this->assertEmpty($result['books']); // Verifica que não há livros
+        $this->assertEquals(0, $result['pagination']['count']); // Verifica que o total é 0
+        $this->assertEquals(0, $result['pagination']['countPages']); // Verifica que o total de páginas é 0
+        $this->assertEquals(1, $result['pagination']['currentPage']); // Verifica que a página atual é 1
+    }
 }
