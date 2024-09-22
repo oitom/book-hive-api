@@ -3,6 +3,7 @@ API CRUD Livros.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/oitom/book-hive-api/badge)](https://www.codefactor.io/repository/github/oitom/book-hive-api)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b6622d01eb5db20fb80e/maintainability)](https://codeclimate.com/github/oitom/book-hive-api/maintainability)
+[![Workflow](https://github.com/oitom/book-hive-api/actions/workflows/ci.yml/badge.svg)](https://github.com/oitom/book-hive-api/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/github/oitom/book-hive-api/graph/badge.svg?token=fEo3raVrPp)](https://codecov.io/github/oitom/book-hive-api)
 
 ## Solução
