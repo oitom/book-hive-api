@@ -21,20 +21,25 @@ jobs:
       - name: Install dependencies
         run: composer install
 
+      - name: Create coverage directory
+        run: mkdir -p coverage
+  
       - name: Copy coverage report
         run: |
           if [ -f coverage.xml ]; then
-            cp coverage.xml ./coverage/
+            cp coverage.xml coverage/
           else
             echo "Coverage file not found."
+            exit 1
           fi
-
+  
       - name: Check coverage file
         run: |
-          if [ -f ./coverage/coverage.xml ]; then
+          if [ -f coverage/coverage.xml ]; then
             echo "Coverage file found."
           else
             echo "Coverage file not found."
+            exit 1
           fi
 
   upload-coverage:
