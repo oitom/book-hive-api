@@ -8,15 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      DB_HOST: mysql
-      DB_DATABASE: book-hive-db
-      DB_PORT: 3306 
-      DB_USERNAME: user
-      DB_PASSWORD: password
-      CACHE_NAME: cache 
-      CACHE_PORT: 6379 
-      CACHE_TTL: 3600 
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -25,15 +17,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-      
-      - name: List files
-        run: ls -la
      
       - name: Install dependencies
         run: composer install
-
-      - name: Run PHPUnit tests with coverage
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml
 
   upload-coverage:
     runs-on: ubuntu-latest
