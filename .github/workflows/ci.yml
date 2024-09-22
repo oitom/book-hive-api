@@ -21,19 +21,28 @@ jobs:
       - name: Install dependencies
         run: composer install
 
+      - name: Copy coverage report
+        run: |
+          if [ -f coverage.xml ]; then
+            cp coverage.xml ./coverage/
+          else
+            echo "Coverage file not found."
+          fi
+
+      - name: Check coverage file
+        run: |
+          if [ -f ./coverage/coverage.xml ]; then
+            echo "Coverage file found."
+          else
+            echo "Coverage file not found."
+          fi
+
   upload-coverage:
     runs-on: ubuntu-latest
 
     needs: build
 
     steps:
-      - name: Check coverage file
-        run: |
-          if [ -f coverage.xml ]; then
-            echo "Coverage file found."
-          else
-            echo "Coverage file not found."
-          fi
           
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
