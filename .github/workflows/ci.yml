@@ -33,6 +33,14 @@ jobs:
     needs: build
 
     steps:
+      - name: Check coverage file
+        run: |
+          if [ -f coverage.xml ]; then
+            echo "Coverage file found."
+          else
+            echo "Coverage file not found."
+          fi
+          
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
