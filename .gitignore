@@ -19,7 +19,6 @@ build/
 coverage/*
 
 # Ignora arquivos de configuração do ambiente
-.env
 .env.local
 .env.*.local
 .phpunit.result.cache
