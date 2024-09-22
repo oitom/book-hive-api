@@ -22,7 +22,7 @@ class RedisCache implements CacheInterface
 
   public function get(string $key): mixed
   {
-    return json_decode($this->redis->get($key), TRUE);
+    return $this->redis->get($key);
   }
 
   public function delete(string $key): bool

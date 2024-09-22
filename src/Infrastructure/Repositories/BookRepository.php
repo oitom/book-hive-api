@@ -34,7 +34,7 @@ class BookRepository implements BookRepositoryInterface
       return true;
     } catch (\Exception $e) {
       $this->connection->rollBack();
-      throw new \RuntimeException('Error saving book: ' . $e->getMessage());
+      return false;
     }
   }
 
@@ -146,7 +146,7 @@ class BookRepository implements BookRepositoryInterface
       return true;
     } catch (\Exception $e) {
       $this->connection->rollBack();
-      throw new \RuntimeException('Error updating book: ' . $e->getMessage());
+      return false;
     }
   }
 
@@ -165,7 +165,7 @@ class BookRepository implements BookRepositoryInterface
       return true;
     } catch (\Exception $e) {
       $this->connection->rollBack();
-      throw new \RuntimeException('Error deleting book: ' . $e->getMessage());
+      return false;
     }
   }
 
@@ -185,5 +185,20 @@ class BookRepository implements BookRepositoryInterface
     ]);
 
     return $this->connection->lastInsertId();
+  }
+
+  public function setAuthorRepository(AuthorRepository $authorRepository): void
+  {
+    $this->autorRepository = $authorRepository;
+  }
+
+  public function setSubjectRepository(SubjectRepository $subjectRepository): void
+  {
+    $this->assuntoRepository = $subjectRepository;
+  }
+
+  public function setConnection(PDO $connection): void
+  {
+    $this->connection = $connection;
   }
 }

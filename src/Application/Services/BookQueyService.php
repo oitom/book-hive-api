@@ -24,7 +24,7 @@ class BookQueyService
     $cachedBook = $this->cache->get($cacheKey);
 
     if ($cachedBook) {
-      $book = $cachedBook;
+      $book = json_decode($cachedBook, TRUE);
     } else {
       $book = $this->bookRepository->findOne($id);
       if ($book) {
@@ -41,7 +41,7 @@ class BookQueyService
     $cachedBooks = $this->cache->get($cacheKey);
     
     if ($cachedBooks) {
-      $books = $cachedBooks;
+      $books = json_decode($cachedBooks, TRUE);
     } else { 
       $books = $this->bookRepository->find($search, $pageSize, $offset);
 

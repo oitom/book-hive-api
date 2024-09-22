@@ -2,6 +2,9 @@
 
 namespace App\Presentation\Routers;
 
+use App\Presentation\Routers\DefaultHeaderProvider;
+use App\Presentation\Routers\HeaderProviderInterface;
+
 class RouteHandler
 {
   private array $routes;
@@ -9,10 +12,15 @@ class RouteHandler
   private array $body;
   private array $queryParams;
 
-  public function __construct()
+  public function __construct(HeaderProviderInterface $headerProvider = null)
   {
     $this->routes = require __DIR__ . '/routes.php';
-    $this->headers = getallheaders();
+    
+    if ($headerProvider === null) {
+      $headerProvider = new DefaultHeaderProvider();
+    }
+
+    $this->headers = $headerProvider->getHeaders();
     $this->body = json_decode(file_get_contents('php://input'), true) ?? [];
     $this->queryParams = $_GET;
   }

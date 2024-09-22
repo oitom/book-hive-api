@@ -21,12 +21,14 @@ class PDOConnection
       $this->connection = new PDO($dsn, $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']);
       $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
-      throw new \RuntimeException('Database connection error: ' . $e->getMessage());
+      http_response_code(500);
+      echo json_encode(['message' => 'Não foi possível estabelecer uma conexão']);
+      return;
     }
   }
 
-  public function getConnection(): PDO
+  public function getConnection(): ?PDO 
   {
-    return $this->connection;
+    return $this->connection ?? null;
   }
 }

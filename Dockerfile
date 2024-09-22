@@ -31,4 +31,6 @@ COPY . .
 # Configurar o Apache para permitir .htaccess
 COPY ./apache-config.conf /etc/apache2/sites-available/000-default.conf
 
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+
 EXPOSE 80

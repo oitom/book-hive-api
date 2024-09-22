@@ -16,33 +16,18 @@ class BaseController
     $this->queryParams = $queryParams;
   }
 
-  protected function getHeader(string $name)
+  public function sendErrorResponse(array $errors, int $statusCode = HttpCodesEnum::HTTP_BAD_REQUEST)
   {
-    return $this->headers[$name] ?? null;
-  }
-
-  protected function getBody()
-  {
-    return $this->body;
-  }
-
-  protected function getQueryParam(string $name)
-  {
-    return $this->queryParams[$name] ?? null;
-  }
-
-  protected function sendErrorResponse(array $errors, int $statusCode = HttpCodesEnum::HTTP_BAD_REQUEST)
-  {
-    http_response_code($statusCode);
-    header('Content-Type: application/json');
+    $this->setHttpResponseCode($statusCode);
+    $this->sendHeader('Content-Type: application/json');
     echo json_encode(['errors' => $errors]);
-    exit;
+    $this->terminate();
   }
 
-  protected function sendSuccessResponse(array $data = [], string $message = 'success', int $statusCode = HttpCodesEnum::HTTP_OK)
+  public function sendSuccessResponse(array $data = [], string $message = 'success', int $statusCode = HttpCodesEnum::HTTP_OK)
   {
-    http_response_code($statusCode);
-    header('Content-Type: application/json');
+    $this->setHttpResponseCode($statusCode);
+    $this->sendHeader('Content-Type: application/json');
 
     $response = ['message' => $message];
     if (!empty($data)) {
@@ -50,6 +35,22 @@ class BaseController
     }
 
     echo json_encode($response);
+    $this->terminate();
+  }
+
+  protected function setHttpResponseCode(int $code)
+  {
+    http_response_code($code);
+  }
+
+  protected function sendHeader(string $header)
+  {
+    header($header);
+  }
+
+  // Método para simular o exit()
+  protected function terminate()
+  {
     exit;
   }
 }

@@ -25,6 +25,9 @@ class BookEntity
     float $preco,
     array $autores,
     array $assuntos,
+    DateTime $createdAt = null,
+    DateTime $updatedAt = null,
+    DateTime $deletedAt = null
   ) {
     $this->titulo = $titulo;
     $this->editora = $editora;
@@ -34,9 +37,9 @@ class BookEntity
     $this->autores = $autores;
     $this->assuntos = $assuntos;
 
-    $this->createdAt = new DateTime();
-    $this->updatedAt = null;
-    $this->deletedAt = null;
+    $this->createdAt = $createdAt ?? new DateTime();
+    $this->updatedAt = $updatedAt;
+    $this->deletedAt = $deletedAt;
   }
 
   public function getTitulo(): string

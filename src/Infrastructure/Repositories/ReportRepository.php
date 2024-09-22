@@ -15,6 +15,11 @@ class ReportRepository implements ReportRepositoryInterface
     $this->connection = $pdoConnection->getConnection();
   }
 
+  public function setConnection(PDO $connection): void
+  {
+    $this->connection = $connection;
+  }
+  
   public function find(string $search, int $pageSize, int $offset): array
   {
     $searchQuery = '';

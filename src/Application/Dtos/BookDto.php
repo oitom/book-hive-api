@@ -1,27 +1,28 @@
 <?php
 
 namespace App\Application\Dtos;
+Use DateTime;
 
 class BookDto
 {
   public string $id;
   public string $titulo;
   public string $editora;
-  public string $edicao;
+  public int $edicao;
   public int $anoPublicacao;
   public float $preco;
   public array $autores;
   public array $assuntos;
-
   public function __construct(
     string $id,
     string $titulo,
     string $editora,
-    string $edicao,
+    int $edicao,
     int $anoPublicacao,
     float $preco,
     array $autores,
-    array $assuntos
+    array $assuntos,
+
   ) {
     $this->id = $id;
     $this->titulo = $titulo;
@@ -31,5 +32,6 @@ class BookDto
     $this->preco = $preco;
     $this->autores = $autores;
     $this->assuntos = $assuntos;
+
   }
 }

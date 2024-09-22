@@ -18,7 +18,7 @@ class ReportController extends BaseController
     parent::__construct($headers, $body, $queryParams);
   }
 
-  public function generateReport()
+  public function generateReport(): bool
   {
     $search = $this->queryParams['search'] ?? '';
     $page = (int) ($this->queryParams['page'] ?? 1);

@@ -50,9 +50,6 @@ abstract class BaseValidator
               $errors[$field] = "$field deve ser um array com pelo menos $maxLength item(s).";
             }
             break;
-
-          default:
-            $errors[$field] = "Tipo inválido para o campo $field.";
         }
       }
     }
