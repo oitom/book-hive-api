@@ -13,7 +13,7 @@ class PDOConnectionTest extends TestCase
   private string $originalDbUser;
   private string $originalDbPassword;
 
-  protected function setUp(): void
+  protected function setUp() : void
   {
     $this->originalDbHost = $_ENV['DB_HOST'];
     $this->originalDbName = $_ENV['DB_DATABASE'];
@@ -28,7 +28,7 @@ class PDOConnectionTest extends TestCase
     $_ENV['DB_PASSWORD'] = 'password';
   }
 
-  protected function tearDown(): void
+  protected function tearDown() : void
   {
     $_ENV['DB_HOST'] = $this->originalDbHost;
     $_ENV['DB_DATABASE'] = $this->originalDbName;
@@ -37,7 +37,7 @@ class PDOConnectionTest extends TestCase
     $_ENV['DB_PASSWORD'] = $this->originalDbPassword;
   }
 
-  public function testConnectionThrowsExceptionOnError(): void
+  public function testConnectionThrowsExceptionOnError() : void
   {
     $_ENV['DB_HOST'] = 'invalid_host';
     $_ENV['DB_DATABASE'] = 'invalid_db';

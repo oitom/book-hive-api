@@ -11,12 +11,12 @@ class SubjectEntity
     $this->descricao = $descricao;
   }
 
-  public function getDescricao(): string
+  public function getDescricao() : string
   {
     return $this->descricao;
   }
 
-  public function setDescricao(string $descricao): void
+  public function setDescricao(string $descricao) : void
   {
     $this->descricao = $descricao;
   }

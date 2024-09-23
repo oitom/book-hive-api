@@ -15,12 +15,12 @@ class ReportRepository implements ReportRepositoryInterface
     $this->connection = $pdoConnection->getConnection();
   }
 
-  public function setConnection(PDO $connection): void
+  public function setConnection(PDO $connection) : void
   {
     $this->connection = $connection;
   }
-  
-  public function find(string $search, int $pageSize, int $offset): array
+
+  public function find(string $search, int $pageSize, int $offset) : array
   {
     $searchQuery = '';
     if ($search) {
@@ -52,9 +52,9 @@ class ReportRepository implements ReportRepositoryInterface
     $stmt->bindValue(':limit', $pageSize, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
-    
-    $books =  $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-    
+
+    $books = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
     return ['books' => $books];
   }
 }

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Application\Dtos;
-Use DateTime;
 
 class BookDto
 {

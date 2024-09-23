@@ -16,12 +16,12 @@ class BookRepository implements BookRepositoryInterface
   {
     $pdoConnection = new PDOConnection();
     $this->connection = $pdoConnection->getConnection();
-    
+
     $this->autorRepository = new AuthorRepository($this->connection);
     $this->assuntoRepository = new SubjectRepository($this->connection);
   }
 
-  public function save(BookEntity $book): bool
+  public function save(BookEntity $book) : bool
   {
     try {
       $this->connection->beginTransaction();
@@ -38,10 +38,10 @@ class BookRepository implements BookRepositoryInterface
     }
   }
 
-  public function findOne(int $id): array | null
+  public function findOne(int $id) : array|null
   {
-    $stmt = $this->connection->prepare( 'SELECT b.*, 
-          GROUP_CONCAT(DISTINCT a.nome) AS autores, 
+    $stmt = $this->connection->prepare('SELECT b.*,
+          GROUP_CONCAT(DISTINCT a.nome) AS autores,
           GROUP_CONCAT(DISTINCT s.descricao) AS assuntos
       FROM livros b
       LEFT JOIN autores a ON a.livro_id = b.id
@@ -54,7 +54,7 @@ class BookRepository implements BookRepositoryInterface
     return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
   }
 
-  public function find(string $search, int $pageSize, int $offset): array
+  public function find(string $search, int $pageSize, int $offset) : array
   {
     $searchQuery = '';
     if ($search) {
@@ -83,8 +83,8 @@ class BookRepository implements BookRepositoryInterface
     $totalPages = ceil($totalRecords / $pageSize);
 
     $stmt = $this->connection->prepare('
-      SELECT b.*, 
-            GROUP_CONCAT(DISTINCT a.nome) AS autores, 
+      SELECT b.*,
+            GROUP_CONCAT(DISTINCT a.nome) AS autores,
             GROUP_CONCAT(DISTINCT s.descricao) AS assuntos
       FROM livros b
       LEFT JOIN autores a ON a.livro_id = b.id
@@ -99,44 +99,43 @@ class BookRepository implements BookRepositoryInterface
     }
     $stmt->bindValue(':limit', $pageSize, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-
     $stmt->execute();
-    
+
     $books = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
     return [
-      'books' => $books,
+      'books'      => $books,
       'pagination' => [
-        'count' => $totalRecords,
-        'countPages' => $totalPages,
+        'count'       => $totalRecords,
+        'countPages'  => $totalPages,
         'currentPage' => ($offset / $pageSize) + 1
-      ]
+      ],
     ];
   }
-  
-  public function update(int $bookId, BookEntity $book): bool
+
+  public function update(int $bookId, BookEntity $book) : bool
   {
     try {
       $this->connection->beginTransaction();
 
       $stmt = $this->connection->prepare(
-        'UPDATE livros 
-          SET titulo = :titulo, editora = :editora, edicao = :edicao, 
-            anoPublicacao = :anoPublicacao, preco = :preco, updatedAt = :updatedAt 
+        'UPDATE livros
+          SET titulo = :titulo, editora = :editora, edicao = :edicao,
+            anoPublicacao = :anoPublicacao, preco = :preco, updatedAt = :updatedAt
           WHERE id = :id'
       );
 
       $stmt->execute([
-        ':titulo' => $book->getTitulo(),
-        ':editora' => $book->getEditora(),
-        ':edicao' => $book->getEdicao(),
+        ':titulo'        => $book->getTitulo(),
+        ':editora'       => $book->getEditora(),
+        ':edicao'        => $book->getEdicao(),
         ':anoPublicacao' => $book->getAnoPublicacao(),
-        ':preco' => $book->getPreco(),
-        ':updatedAt' => $book->getUpdatedAt(),
-        ':id' => $bookId
+        ':preco'         => $book->getPreco(),
+        ':updatedAt'     => $book->getUpdatedAt(),
+        ':id'            => $bookId,
       ]);
 
-    $this->autorRepository->deleteAllByBookId($bookId);
+      $this->autorRepository->deleteAllByBookId($bookId);
       $this->autorRepository->saveAll($book->getAutores(), $bookId);
 
       $this->assuntoRepository->deleteAllByBookId($bookId);
@@ -150,7 +149,7 @@ class BookRepository implements BookRepositoryInterface
     }
   }
 
-  public function delete(int $id, BookEntity $book): bool
+  public function delete(int $id, BookEntity $book) : bool
   {
     try {
       $this->connection->beginTransaction();
@@ -158,7 +157,7 @@ class BookRepository implements BookRepositoryInterface
       $stmt = $this->connection->prepare('UPDATE livros SET deletedAt = :deletedAt WHERE id = :id');
       $stmt->execute([
         ':deletedAt' => $book->getDeletedAt(),
-        ':id' => $id
+        ':id'        => $id,
       ]);
 
       $this->connection->commit();
@@ -169,35 +168,35 @@ class BookRepository implements BookRepositoryInterface
     }
   }
 
-  private function insertBook(BookEntity $book): int
+  private function insertBook(BookEntity $book) : int
   {
     $stmt = $this->connection->prepare(
-      'INSERT INTO livros (titulo, editora, edicao, anoPublicacao, preco, createdAt) 
+      'INSERT INTO livros (titulo, editora, edicao, anoPublicacao, preco, createdAt)
         VALUES (:titulo, :editora, :edicao, :anoPublicacao, :preco, :createdAt)'
     );
     $stmt->execute([
-      ':titulo' => $book->getTitulo(),
-      ':editora' => $book->getEditora(),
-      ':edicao' => $book->getEdicao(),
+      ':titulo'        => $book->getTitulo(),
+      ':editora'       => $book->getEditora(),
+      ':edicao'        => $book->getEdicao(),
       ':anoPublicacao' => $book->getAnoPublicacao(),
-      ':preco' => $book->getPreco(),
-      ':createdAt' => $book->getCreatedAt(),
+      ':preco'         => $book->getPreco(),
+      ':createdAt'     => $book->getCreatedAt(),
     ]);
 
     return $this->connection->lastInsertId();
   }
 
-  public function setAuthorRepository(AuthorRepository $authorRepository): void
+  public function setAuthorRepository(AuthorRepository $authorRepository) : void
   {
     $this->autorRepository = $authorRepository;
   }
 
-  public function setSubjectRepository(SubjectRepository $subjectRepository): void
+  public function setSubjectRepository(SubjectRepository $subjectRepository) : void
   {
     $this->assuntoRepository = $subjectRepository;
   }
 
-  public function setConnection(PDO $connection): void
+  public function setConnection(PDO $connection) : void
   {
     $this->connection = $connection;
   }

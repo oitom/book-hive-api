@@ -11,12 +11,12 @@ class AuthorEntity
     $this->nome = $nome;
   }
 
-  public function getNome(): string
+  public function getNome() : string
   {
     return $this->nome;
   }
 
-  public function setNome(string $nome): void
+  public function setNome(string $nome) : void
   {
     $this->nome = $nome;
   }

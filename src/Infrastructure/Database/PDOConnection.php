@@ -27,7 +27,7 @@ class PDOConnection
     }
   }
 
-  public function getConnection(): ?PDO 
+  public function getConnection() : ?PDO
   {
     return $this->connection ?? null;
   }

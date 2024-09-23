@@ -18,7 +18,7 @@ class BookQueyService
     $this->cache = $cache;
   }
 
-  public function findOne(int $id): BookDto|null
+  public function findOne(int $id) : BookDto|null
   {
     $cacheKey = "book_$id";
     $cachedBook = $this->cache->get($cacheKey);
@@ -35,14 +35,14 @@ class BookQueyService
     return BookMapper::mapOne($book);
   }
 
-  public function find(string $search, int $pageSize, int $offset): array|null
+  public function find(string $search, int $pageSize, int $offset) : array|null
   {
     $cacheKey = "books_search_{$search}_pageSize_{$pageSize}_offset_{$offset}";
     $cachedBooks = $this->cache->get($cacheKey);
-    
+
     if ($cachedBooks) {
       $books = json_decode($cachedBooks, TRUE);
-    } else { 
+    } else {
       $books = $this->bookRepository->find($search, $pageSize, $offset);
 
       if (count($books['books']) > 0) {

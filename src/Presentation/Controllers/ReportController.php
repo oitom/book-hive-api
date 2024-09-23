@@ -18,7 +18,7 @@ class ReportController extends BaseController
     parent::__construct($headers, $body, $queryParams);
   }
 
-  public function generateReport(): bool
+  public function generateReport() : bool
   {
     $search = $this->queryParams['search'] ?? '';
     $page = (int) ($this->queryParams['page'] ?? 1);
@@ -29,11 +29,11 @@ class ReportController extends BaseController
 
     if (count($data['books']) == 0) {
       $this->sendErrorResponse(
-        ['message' => 'Books not found'], 
+        ['message' => 'Books not found'],
         HttpCodesEnum::HTTP_NOT_FOUND
       );
     }
-    
+
     return $this->reportQueryService->generateBookReport($data['books']);
   }
 }

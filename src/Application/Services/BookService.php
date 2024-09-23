@@ -21,13 +21,13 @@ class BookService
     $this->cache = $cache;
   }
 
-  public function create(BookCommand $bookCreateCommand): bool
+  public function create(BookCommand $bookCreateCommand) : bool
   {
-    $autores = array_map(function($autor) {
+    $autores = array_map(function ($autor) {
       return new AuthorEntity($autor['nome']);
     }, $bookCreateCommand->autores);
 
-    $assuntos = array_map(function($assunto) {
+    $assuntos = array_map(function ($assunto) {
       return new SubjectEntity($assunto['descricao']);
     }, $bookCreateCommand->assuntos);
 
@@ -41,7 +41,7 @@ class BookService
       $assuntos
     );
     $result = $this->bookRepository->save($book);
-    
+
     if ($result) {
       $this->cache->clear('books_search_*');
     }
@@ -49,7 +49,7 @@ class BookService
     return $result;
   }
 
-  public function update(int $id, BookCommand $bookUpdateCommand): bool | null
+  public function update(int $id, BookCommand $bookUpdateCommand) : bool|null
   {
     $book = $this->bookRepository->findOne($id);
     $existingBook = BookMapper::mapOne($book);
@@ -57,7 +57,7 @@ class BookService
     if ($existingBook === null) {
       return null;
     }
-    
+
     $existingBook = BookMapper::toEntity($existingBook);
     $existingBook->setTitulo($bookUpdateCommand->titulo);
     $existingBook->setEditora($bookUpdateCommand->editora);
@@ -66,14 +66,16 @@ class BookService
     $existingBook->setPreco($bookUpdateCommand->preco);
     $existingBook->setUpdatedAt();
 
-    $autores = array_map(function($autor) {
+    $autores = array_map(function ($autor) {
       return new AuthorEntity($autor['nome']);
     }, $bookUpdateCommand->autores);
+
     $existingBook->setAutores($autores);
 
-    $assuntos = array_map(function($assunto) {
+    $assuntos = array_map(function ($assunto) {
       return new SubjectEntity($assunto['descricao']);
     }, $bookUpdateCommand->assuntos);
+
     $existingBook->setAssuntos($assuntos);
 
     $result = $this->bookRepository->update($id, $existingBook);
@@ -86,16 +88,18 @@ class BookService
     return $result;
   }
 
-  public function delete(int $id): bool
+  public function delete(int $id) : bool
   {
     $book = $this->bookRepository->findOne($id);
     $existingBook = BookMapper::mapOne($book);
+
     if ($existingBook === null) {
       return false;
     }
+
     $existingBook = BookMapper::toEntity($existingBook);
     $existingBook->setDeletedAt();
-    
+
     $result = $this->bookRepository->delete($id, $existingBook);
 
     if ($result) {

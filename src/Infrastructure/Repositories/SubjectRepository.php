@@ -13,7 +13,7 @@ class SubjectRepository
     $this->connection = $connection;
   }
 
-  public function saveAll(array $assuntos, int $bookId): void
+  public function saveAll(array $assuntos, int $bookId) : void
   {
     $stmt = $this->connection->prepare(
       'INSERT INTO assuntos (livro_id, descricao) VALUES (:livro_id, :descricao)'
@@ -21,17 +21,17 @@ class SubjectRepository
 
     foreach ($assuntos as $assunto) {
       $stmt->execute([
-        ':livro_id' => $bookId,
-        ':descricao' => $assunto->getDescricao()
+        ':livro_id'  => $bookId,
+        ':descricao' => $assunto->getDescricao(),
       ]);
     }
   }
 
-  public function deleteAllByBookId(int $bookId): void
+  public function deleteAllByBookId(int $bookId) : void
   {
     $stmt = $this->connection->prepare('DELETE FROM assuntos WHERE livro_id = :bookId');
     $stmt->bindParam(':bookId', $bookId, PDO::PARAM_INT);
-    
+
     $stmt->execute();
   }
 }

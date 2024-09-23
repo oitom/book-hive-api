@@ -15,7 +15,7 @@ class RouteHandler
   public function __construct(HeaderProviderInterface $headerProvider = null)
   {
     $this->routes = require __DIR__ . '/routes.php';
-    
+
     if ($headerProvider === null) {
       $headerProvider = new DefaultHeaderProvider();
     }

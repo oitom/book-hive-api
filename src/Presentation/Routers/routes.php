@@ -1,15 +1,15 @@
 <?php
 
 return [
-  'POST' => [
+  'POST'   => [
     '/books' => 'App\Presentation\Controllers\BookController@createBook',
   ],
-  'GET' => [
-    '/books' => 'App\Presentation\Controllers\BookController@listBooks',
+  'GET'    => [
+    '/books'     => 'App\Presentation\Controllers\BookController@listBooks',
     '/books/:id' => 'App\Presentation\Controllers\BookController@listOneBook',
-    '/report' => 'App\Presentation\Controllers\ReportController@generateReport',
+    '/report'    => 'App\Presentation\Controllers\ReportController@generateReport',
   ],
-  'PUT' => [
+  'PUT'    => [
     '/books/:id' => 'App\Presentation\Controllers\BookController@updateBook',
   ],
   'DELETE' => [

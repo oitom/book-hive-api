@@ -17,19 +17,19 @@ class ReportQueryService
     $this->pdf = new TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
   }
 
-  public function setPdf(TCPDF $pdf): void
+  public function setPdf(TCPDF $pdf) : void
   {
     $this->pdf = $pdf;
   }
 
-  public function find(string $search, int $pageSize, int $offset): array|null
+  public function find(string $search, int $pageSize, int $offset) : array|null
   {
     $books = $this->reportRepository->find($search, $pageSize, $offset);
 
     return BookMapper::mapList($books);
   }
 
-  public function generateBookReport($books): bool
+  public function generateBookReport($books) : bool
   {
     $this->pdf->AddPage();
     $this->pdf->SetFont('helvetica', 'B', 14);
@@ -51,7 +51,7 @@ class ReportQueryService
 
     $fill = true;
     foreach ($books as $livro) {
-      $fill=!$fill;
+      $fill = ! $fill;
       $autores = implode(', ', $livro->autores);
       $assuntos = implode(', ', $livro->assuntos);
 
@@ -68,12 +68,12 @@ class ReportQueryService
 
       $preco = "R$ " . number_format($livro->preco, 2, ',', '.');
       $this->pdf->Cell(25, 5, $preco, 1, 0, 'C', $fill);
-      
+
       $this->pdf->Cell(60, 5, $autores, 1, 0, 'L', $fill);
       $this->pdf->Cell(80, 5, $assuntos, 1, 1, 'L', $fill);
     }
     $this->pdf->Output('relatorio_livros.pdf', 'D');
-    
+
     return true;
   }
 }
