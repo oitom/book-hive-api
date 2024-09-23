@@ -8,8 +8,7 @@ API CRUD Livros.
 
 `PHP 8.2` `PHP Unit 9.6` `TCPDF 6.7`
 ## Solução
-Este projeto foi desenvolvido...
-
+Este projeto foi desenvolvido em PHP 8, seguindo os princípios da arquitetura RESTful para a construção de APIs.
 Além disso, a integridade do código foi assegurada por meio de testes unitários implementados com PHPUnit.
 
 ### Estrutura do projeto
