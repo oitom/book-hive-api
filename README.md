@@ -6,6 +6,7 @@ API CRUD Livros.
 [![Workflow](https://github.com/oitom/book-hive-api/actions/workflows/ci.yml/badge.svg)](https://github.com/oitom/book-hive-api/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/github/oitom/book-hive-api/graph/badge.svg?token=fEo3raVrPp)](https://codecov.io/github/oitom/book-hive-api)
 
+`PHP 8.2` `PHP Unit 9.6` `TCPDF 6.7`
 ## Solução
 Este projeto foi desenvolvido...
 
