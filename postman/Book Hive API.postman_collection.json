@@ -1,0 +1,207 @@
+{
+	"info": {
+		"_postman_id": "c11116ff-d077-4225-9f21-a2960b2dcda8",
+		"name": "Book Hive API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32200253"
+	},
+	"item": [
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "1234",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"titulo\": \"A Game of Thrones\",\r\n  \"editora\": \"Bantam Books\",\r\n  \"edicao\": 1,\r\n  \"anoPublicacao\": \"1996\",\r\n  \"preco\": 49.90,\r\n  \"autores\": [\r\n    {\r\n      \"nome\": \"George R. R. Martin\"\r\n    }\r\n  ],\r\n  \"assuntos\": [\r\n    {\r\n      \"descricao\": \"Fantasia\"\r\n    },\r\n    {\r\n      \"descricao\": \"Épico\"\r\n    },\r\n    {\r\n      \"descricao\": \"Aventura\"\r\n    },\r\n    {\r\n      \"descricao\": \"Política\"\r\n    }\r\n  ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/books",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "1234",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titulo\": \"Introduction to Quantum Computing\",\r\n    \"editora\": \"FutureTech\",\r\n    \"edicao\": 1,\r\n    \"anoPublicacao\": 2020,\r\n    \"preco\": 59.99,\r\n    \"autores\": [\r\n        {\r\n            \"nome\": \"Alice Johnson\"\r\n        },\r\n        {\r\n            \"nome\": \"David Clark\"\r\n        }\r\n    ],\r\n    \"assuntos\": [\r\n        {\r\n            \"descricao\": \"APIs\"\r\n        },\r\n        {\r\n            \"descricao\": \"Programming\"\r\n        }\r\n    ]  \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/books/8",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"books",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/books/8",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"books",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/books/8",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"books",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/books?search=&page=1&pageSize=10",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"books"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": ""
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Report",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/report?search=Design&page=1&pageSize=100",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"report"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "Design"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "localhost:8080",
+			"type": "string"
+		}
+	]
+}

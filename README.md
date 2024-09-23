@@ -13,14 +13,31 @@ Além disso, a integridade do código foi assegurada por meio de testes unitári
 
 ### Estrutura do projeto
 ```
-
+/project
+│
+├── index.php
+├── src
+│   └── Application
+│       └── Dtos
+│       └── Mappers
+│       └── Services
+│   └── Domain
+│       └── Commands
+│       └── Entities
+│       └── Repositories
+│   └── Infrastructure
+│       └── Database
+│       └── Repositories
+│   └── Presentation
+│       └── Controllers
+│       └── Routers
+│       └── Validators
 ```
 
 ## Configuração do Ambiente
 Pré-requisitos
 
 - Docker
-- Composer
 
 ## Instalação
 1. Clone este repositório:
@@ -39,7 +56,7 @@ cd book-hive-api
 docker-compose up -d --build
 ```
 
-4. Rode o arquivo `migration.sql` no client do BD
+4. Rode o arquivo `migration.sql` no seu client BD. As credenciais do BD estão disponíveis no arquivo `.env`.
 
 5. Acesse a aplicação em http://localhost:8080.
 
@@ -49,34 +66,91 @@ docker-compose up -d --build
 ```
 docker exec -it book-hive-api vendor/bin/phpunit --coverage-html=coverage/
 ```
-2. Se tudo der certo, o relatório estará disponível em: http://localhost:8080/coverage/index.html
+
+2. Se tudo der certo, o relatório de cobertura estará disponível em: [coverage](http://localhost:8080/coverage/index.html)
 
 ## Executando o Projeto
-Para testar as chamadas da API, você pode seguir estas instruções utilizando ferramentas como Postman (no) ou curl. Certifique-se de incluir os cabeçalhos `client-id` e `client-secret` em todas as suas solicitações para autenticação adequada. Siga os passos abaixo:
+Você pode testar o projeto utilizando ferramentas como cURL, Postman ou qualquer outro cliente HTTP de sua preferência. 
+Seguem algumas sugestões de uso:
 
 #### Importando collection no postman
 Se você escolher utilizar o Postman, pode importar facilmente os arquivos de collection e environment presentes na raiz do projeto. Para isso, siga estes passos simples:
 
 1. Abra o Postman;
 2. Clique em "Import" no canto superior esquerdo;
-3. Selecione a opção "File" e escolha os arquivos de `collection` (*.json) e `environment` (*.json) que está na raiz do projeto;
+3. Selecione a opção "File" e escolha o arquivo de `collection` (*.json)  que está no diretório `/postman` na raiz do projeto;
 4. Após a importação, os endpoints e variáveis necessárias estarão disponíveis para uso imediato.
 
-#### Credenciais
+### Requests
 
-- `client-id`: 
+#### Criação de livro:
+```bash
+curl --location 'localhost:8080/books' \
+--header 'Authorization: 1234' \
+--header 'Content-Type: application/json' \
+--data '{
+  "titulo": "A Game of Thrones",
+  "editora": "Bantam Books",
+  "edicao": 1,
+  "anoPublicacao": "1996",
+  "preco": 49.90,
+  "autores": [
+    {
+      "nome": "George R. R. Martin"
+    }
+  ],
+  "assuntos": [
+    {
+      "descricao": "Fantasia"
+    },
+    {
+      "descricao": "Épico"
+    },
+  ]
+}
+'
 ```
-bookhive
+#### Atualização de livro:
+```bash
+curl --location --request PUT 'localhost:8080/books/8' \
+--header 'Authorization: 1234' \
+--header 'Content-Type: application/json' \
+--data '{
+    "titulo": "Introduction to Quantum Computing",
+    "editora": "FutureTech",
+    "edicao": 1,
+    "anoPublicacao": 2020,
+    "preco": 59.99,
+    "autores": [
+        {
+          "nome": "Alice Johnson"
+        },
+        {
+          "nome": "David Clark"
+        }
+    ],
+    "assuntos": [
+        {
+          "descricao": "APIs"
+        },
+        {
+          "descricao": "Programming"
+        }
+    ]  
+}'
 ```
-
-- `client-secret`: 
+#### Remoção de livro:
+```bash
+curl --location --request DELETE 'localhost:8080/books/8'
 ```
-550e8400-e29b-41d4-a716-446655440000
+#### Listagem de livro por id:
+```bash
+curl --location 'localhost:8080/books/8'
 ```
-
-### Cenário de Sucesso
-
-### Cenário de Erros
+#### Listagem de livros:
+```bash
+curl --location 'localhost:8080/books?search=&page=1&pageSize=10'
+```
 
 ## Encerrando o Ambiente
 Para encerrar o ambiente Docker, execute:
@@ -85,3 +159,21 @@ Para encerrar o ambiente Docker, execute:
 docker-compose down
 ```
 Isso desligará o contêiner Docker e liberará os recursos.
+
+## Melhorias e Desenvolvimentos futuros
+### Evolução da Autenticação
+Planeja-se aprimorar o sistema de autenticação, adicionando suporte para OAuth 2.0 e JWT (JSON Web Token), garantindo uma autenticação segura e escalável. Isso permitirá a integração com provedores de autenticação externos, como Google, Facebook e GitHub, além de possibilitar um controle de acesso mais robusto e refinado para diferentes usuários dentro da aplicação.
+
+### Criação do Módulo de Usuário
+Outro passo importante será a criação de um módulo dedicado ao gerenciamento de usuários. Esse módulo incluirá o CRUD completo para perfis de usuário, com funcionalidades como:
+
+- Cadastro e edição de perfis,
+- Gerenciamento de permissões,
+- Recuperação de senha,
+- Auditoria de ações dos usuários no sistema.
+
+### Integrações com APIs de Pesquisa de Livros
+
+Para enriquecer a experiência do usuário, pretendemos integrar a aplicação com APIs de pesquisa de livros, como a Google Books API ou Open Library API. Com essa integração, os usuários poderão pesquisar e importar informações detalhadas sobre livros diretamente na plataforma, além de obter dados atualizados como resenhas, capas de livros e mais detalhes bibliográficos automaticamente.
+
+*"A verdadeira sabedoria está em reconhecer o quão pouco sabemos e no desejo constante de aprender mais."* – Sócrates
