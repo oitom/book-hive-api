@@ -38,13 +38,13 @@ class ReportQueryService
     $this->pdf->SetFillColor(100, 100, 100);
     $this->pdf->SetTextColor(255, 255, 255);
 
-    $this->pdf->Cell(40, 5, 'Título', 1, 0, 'C', 1);
+    $this->pdf->Cell(60, 5, 'Título', 1, 0, 'C', 1);
     $this->pdf->Cell(30, 5, 'Editora', 1, 0, 'C', 1);
     $this->pdf->Cell(20, 5, 'Edição', 1, 0, 'C', 1);
     $this->pdf->Cell(20, 5, 'Ano Pub.', 1, 0, 'C', 1);
     $this->pdf->Cell(25, 5, 'Preço', 1, 0, 'C', 1);
-    $this->pdf->Cell(60, 5, 'Autores', 1, 0, 'C', 1);
-    $this->pdf->Cell(80, 5, 'Assuntos', 1, 1, 'C', 1);
+    $this->pdf->Cell(50, 5, 'Autores', 1, 0, 'C', 1);
+    $this->pdf->Cell(70, 5, 'Assuntos', 1, 1, 'C', 1);
 
     $this->pdf->SetFillColor(224, 235, 255);
     $this->pdf->SetTextColor(0);
@@ -55,13 +55,17 @@ class ReportQueryService
       $autores = implode(', ', $livro->autores);
       $assuntos = implode(', ', $livro->assuntos);
 
+      $titulo = $livro->titulo;
+      if (strlen($titulo) > 40) {
+        $titulo = substr($titulo, 0, 40) . '...';
+      }
       if (strlen($autores) > 40) {
         $autores = substr($autores, 0, 40) . '...';
       }
       if (strlen($assuntos) > 45) {
         $assuntos = substr($assuntos, 0, 45) . '...';
       }
-      $this->pdf->Cell(40, 5, $livro->titulo, 1, 0, 'L', $fill);
+      $this->pdf->Cell(60, 5, $titulo, 1, 0, 'L', $fill);
       $this->pdf->Cell(30, 5, $livro->editora, 1, 0, 'C', $fill);
       $this->pdf->Cell(20, 5, $livro->edicao, 1, 0, 'C', $fill);
       $this->pdf->Cell(20, 5, $livro->anoPublicacao, 1, 0, 'C', $fill);
@@ -69,8 +73,8 @@ class ReportQueryService
       $preco = "R$ " . number_format($livro->preco, 2, ',', '.');
       $this->pdf->Cell(25, 5, $preco, 1, 0, 'C', $fill);
 
-      $this->pdf->Cell(60, 5, $autores, 1, 0, 'L', $fill);
-      $this->pdf->Cell(80, 5, $assuntos, 1, 1, 'L', $fill);
+      $this->pdf->Cell(50, 5, $autores, 1, 0, 'L', $fill);
+      $this->pdf->Cell(70, 5, $assuntos, 1, 1, 'L', $fill);
     }
     $this->pdf->Output('relatorio_livros.pdf', 'D');
 
