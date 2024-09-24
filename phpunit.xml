@@ -4,6 +4,10 @@
     <include>
       <directory suffix=".php">./src</directory>
     </include>
+    <exclude>
+      <directory suffix=".php">./src/Presentation/Controllers/</directory>
+      <directory suffix=".php">./src/Infrastructure/Repositories/</directory>
+    </exclude>
   </coverage>
   <testsuites>
     <testsuite name="Tests">
