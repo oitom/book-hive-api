@@ -1,4 +1,4 @@
-# book-hive-api
+# BookHiveAPI
 API CRUD Livros.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/oitom/book-hive-api/badge)](https://www.codefactor.io/repository/github/oitom/book-hive-api)
