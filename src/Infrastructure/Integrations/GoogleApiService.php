@@ -18,7 +18,7 @@ class GoogleApiService
   public function searchBooks(string $query, array $params = [])
   {
     if (count($params) == 0)
-      $params = ['maxResults' => $this->$this->maxResults];
+      $params = ['maxResults' => $this->maxResults];
 
     $queryParams = http_build_query(array_merge(['q' => $query, 'key' => $this->apiKey], $params));
     $url = $this->apiUrl . '?' . $queryParams;
