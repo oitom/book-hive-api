@@ -8,6 +8,7 @@ return [
     '/books'     => 'App\Presentation\Controllers\BookController@listBooks',
     '/books/:id' => 'App\Presentation\Controllers\BookController@listOneBook',
     '/report'    => 'App\Presentation\Controllers\ReportController@generateReport',
+    '/books/volumes'    => 'App\Presentation\Controllers\BookController@listBooksVolumes',
   ],
   'PUT'    => [
     '/books/:id' => 'App\Presentation\Controllers\BookController@updateBook',

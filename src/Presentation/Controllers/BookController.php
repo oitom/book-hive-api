@@ -9,6 +9,7 @@ use App\Application\Services\BookQueyService;
 use App\Domain\Commands\BookCommand;
 use App\Infrastructure\Repositories\RedisCache;
 use App\Infrastructure\Repositories\BookRepository;
+use App\Infrastructure\Integrations\GoogleApiService;
 
 class BookController extends BaseController
 {
@@ -124,4 +125,22 @@ class BookController extends BaseController
     );
   }
 
+  public function listBooksVolumes()
+  {
+    $search = $this->queryParams['search'] ?? null;
+
+    if ($search) {
+
+      $googleApiService = new GoogleApiService();
+      $result = $googleApiService->searchBooks($search);
+      if ($result !== false) {
+        $this->sendSuccessResponse($result);
+      }
+    }
+
+    $this->sendErrorResponse(
+      ['message' => 'Books not found'],
+      HttpCodesEnum::HTTP_NOT_FOUND
+    );
+  }
 }
