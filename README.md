@@ -8,8 +8,9 @@ API CRUD Livros.
 
 `PHP 8.2` `PHP Unit 9.6` `TCPDF 6.7`
 ## Solução
-Este projeto foi desenvolvido em PHP 8, seguindo os princípios da arquitetura RESTful para a construção de APIs.
-Além disso, a integridade do código foi assegurada por meio de testes unitários implementados com PHPUnit.
+Este projeto foi desenvolvido em PHP 8, seguindo os princípios da arquitetura RESTful para a construção de APIs robustas e escaláveis. 
+A qualidade e integridade do código são garantidas por meio de testes unitários com PHPUnit. 
+Além disso, o sistema está integrado com a Google Books API, permitindo acessar informações externas para enriquecer os dados do catálogo de livros.
 
 ### Estrutura do projeto
 ```
@@ -28,6 +29,7 @@ Além disso, a integridade do código foi assegurada por meio de testes unitári
 │   └── Infrastructure
 │       └── Database
 │       └── Repositories
+│       └── Integrations
 │   └── Presentation
 │       └── Controllers
 │       └── Routers
@@ -151,6 +153,10 @@ curl --location 'localhost:8080/books/8'
 ```bash
 curl --location 'localhost:8080/books?search=&page=1&pageSize=10'
 ```
+#### Listagem de catalogos de livros (Google Books API):
+```bash
+curl --location 'localhost:8080/books/volumes?search='
+```
 
 ## Encerrando o Ambiente
 Para encerrar o ambiente Docker, execute:
@@ -171,9 +177,5 @@ Outro passo importante será a criação de um módulo dedicado ao gerenciamento
 - Gerenciamento de permissões,
 - Recuperação de senha,
 - Auditoria de ações dos usuários no sistema.
-
-### Integrações com APIs de Pesquisa de Livros
-
-Para enriquecer a experiência do usuário, pretendemos integrar a aplicação com APIs de pesquisa de livros, como a Google Books API ou Open Library API. Com essa integração, os usuários poderão pesquisar e importar informações detalhadas sobre livros diretamente na plataforma, além de obter dados atualizados como resenhas, capas de livros e mais detalhes bibliográficos automaticamente.
 
 *"A verdadeira sabedoria está em reconhecer o quão pouco sabemos e no desejo constante de aprender mais."* – Sócrates
